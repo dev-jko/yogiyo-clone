@@ -1,22 +1,28 @@
 package com.nadarm.yogiyo.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.nadarm.yogiyo.ui.model.BaseItem
 
-class MainAdapter : RecyclerView.Adapter<ViewHolder>() {
+class MultiItemAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-    lateinit var itemList: MutableList<Any>
+    var itemList: List<BaseItem> = emptyList()
+        set(value) {
+            field = value
+            this.notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(viewType, parent, false)
-        return ViewHolder(view)
+        val binding: ViewDataBinding = DataBindingUtil.inflate(inflater, viewType, parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return
+        return itemList[position].getType()
     }
 
     override fun getItemCount(): Int {
@@ -27,12 +33,7 @@ class MainAdapter : RecyclerView.Adapter<ViewHolder>() {
         val item = itemList[position]
         holder.bind(item)
     }
-}
 
-class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    fun bind(item: Any) {
-
-    }
 
 }
+
