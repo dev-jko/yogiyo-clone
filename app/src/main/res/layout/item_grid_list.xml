@@ -7,6 +7,7 @@
         <variable
             name="item"
             type="com.nadarm.yogiyo.ui.model.BaseItem.ListItem" />
+
     </data>
 
     <LinearLayout
@@ -20,9 +21,10 @@
             bindSnapHelper="@{item.snapHelper}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             app:adapter="@{item.adapter}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3" />
 
     </LinearLayout>
 </layout>
