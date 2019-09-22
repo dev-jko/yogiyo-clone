@@ -12,6 +12,7 @@ import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.data.TestDataManager
 import com.nadarm.yogiyo.data.cache.FoodCategoryCacheDataSource
 import com.nadarm.yogiyo.databinding.FragmentMainFoodBinding
+import com.nadarm.yogiyo.ui.adapter.AutoScrollCircularListAdapter
 import com.nadarm.yogiyo.ui.adapter.CircularListAdapter
 import com.nadarm.yogiyo.ui.adapter.MultiItemAdapter
 import com.nadarm.yogiyo.ui.adapter.SingleItemListAdapter
@@ -51,7 +52,7 @@ class MainFoodFragment : Fragment() {
         val topAdList = TestDataManager.topAds.map {
             AdItem(it)
         }
-        val adAdapter = CircularListAdapter()
+        val adAdapter = AutoScrollCircularListAdapter()
         val snapHelper = PagerSnapHelper()
 
         val menu = SingleItemListAdapter()

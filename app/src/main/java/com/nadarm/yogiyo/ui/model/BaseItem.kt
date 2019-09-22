@@ -46,13 +46,13 @@ data class HorizontalListItem(
     override val item: List<SingleItem>,
     override val adapter: ListAdapter<SingleItem, ViewHolder>,
     override val snapHelper: SnapHelper? = null
-) : BaseItem.ListItem(item, adapter)
+) : BaseItem.ListItem(item, adapter, snapHelper)
 
 data class GridListItem(
     override val item: List<SingleItem>,
     override val adapter: ListAdapter<SingleItem, ViewHolder>,
     override val snapHelper: SnapHelper? = null
-) : BaseItem.ListItem(item, adapter)
+) : BaseItem.ListItem(item, adapter, snapHelper)
 
 data class AdItem(override val item: Ad) : BaseItem.SingleItem(item)
 data class FoodCategoryItem(override val item: FoodCategory) : BaseItem.SingleItem(item)
