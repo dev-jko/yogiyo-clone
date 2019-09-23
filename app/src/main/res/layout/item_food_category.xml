@@ -7,12 +7,17 @@
         <variable
             name="item"
             type="com.nadarm.yogiyo.ui.model.FoodCategoryItem" />
+
+        <variable
+            name="delegate"
+            type="com.nadarm.yogiyo.ui.model.BaseItem.Delegate" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="1px"
+        android:onClick="@{()->delegate.itemClicked(item)}"
         android:orientation="vertical">
 
         <ImageView

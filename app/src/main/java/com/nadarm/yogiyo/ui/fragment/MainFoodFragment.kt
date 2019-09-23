@@ -5,26 +5,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.nadarm.yogiyo.R
-import com.nadarm.yogiyo.data.TestDataManager
+import com.nadarm.yogiyo.data.cache.AdCacheDataSource
 import com.nadarm.yogiyo.data.cache.FoodCategoryCacheDataSource
+import com.nadarm.yogiyo.data.repository.AdRepository
 import com.nadarm.yogiyo.databinding.FragmentMainFoodBinding
 import com.nadarm.yogiyo.ui.adapter.AutoScrollCircularListAdapter
-import com.nadarm.yogiyo.ui.adapter.CircularListAdapter
 import com.nadarm.yogiyo.ui.adapter.MultiItemAdapter
 import com.nadarm.yogiyo.ui.adapter.SingleItemListAdapter
 import com.nadarm.yogiyo.ui.model.*
-import kotlinx.android.synthetic.main.fragment_main_food.*
+import com.nadarm.yogiyo.ui.viewModel.AutoScrollAdViewModel
+import javax.inject.Inject
 
-class MainFoodFragment : Fragment() {
+class MainFoodFragment : BaseFragment() {
 
     private lateinit var binding: FragmentMainFoodBinding
 
 //    @Inject
-//    lateinit var vm: MainFoodViewModel
+//    lateinit var vm: AutoScrollAdViewModel.ViewModelImpl
 //
 //    @Inject
 //    lateinit var mainAdapter: RecyclerView.Adapter<ViewHolder>
@@ -34,6 +36,9 @@ class MainFoodFragment : Fragment() {
 //
 //    @Inject
 //    lateinit var menuAdapter: ListAdapter<BaseItem, ViewHolder>
+
+    @Inject
+    lateinit var topAdVm : AutoScrollAdViewModel.ViewModelImpl
 
 
     override fun onCreateView(
@@ -49,10 +54,22 @@ class MainFoodFragment : Fragment() {
 
         val mainAdapter = MultiItemAdapter()
 
-        val topAdList = TestDataManager.topAds.map {
+
+
+        val topAdList = adRepo.getAds().map {
             AdItem(it)
         }
-        val adAdapter = AutoScrollCircularListAdapter()
+        val adAdapter = AutoScrollCircularListAdapter(delegate = object : BaseItem.Delegate {
+            override fun itemClicked(item: BaseItem) {
+                if (item is AdItem) {
+                    Toast.makeText(
+                        this@MainFoodFragment.context,
+                        item.item.imageUrl,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
         val snapHelper = PagerSnapHelper()
 
         val menu = SingleItemListAdapter()

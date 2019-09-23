@@ -1,9 +1,8 @@
 package com.nadarm.yogiyo.data
 
+import com.nadarm.yogiyo.data.cache.AdCacheDataSource
 import com.nadarm.yogiyo.data.cache.FoodCategoryCacheDataSource
-import com.nadarm.yogiyo.data.repository.FoodCategoryDataRepository
-import com.nadarm.yogiyo.data.repository.FoodCategoryDataSource
-import com.nadarm.yogiyo.data.repository.FoodCategoryRepository
+import com.nadarm.yogiyo.data.repository.*
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
@@ -18,6 +17,14 @@ interface DataBindingModule {
     @Singleton
     @Binds
     fun bindFoodCategoryCacheDataSource(dataSource: FoodCategoryCacheDataSource): FoodCategoryDataSource.Cache
+
+    @Singleton
+    @Binds
+    fun bindAdRepository(repository: AdDataRepository): AdRepository
+
+    @Singleton
+    @Binds
+    fun bindAdCacheDataSource(dataSource: AdCacheDataSource): AdDataSource.Cache
 
 }
 

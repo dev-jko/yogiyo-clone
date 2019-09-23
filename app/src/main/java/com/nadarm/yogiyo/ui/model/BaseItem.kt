@@ -28,6 +28,10 @@ sealed class BaseItem {
         }
     }
 
+    interface Delegate {
+        fun itemClicked(item: BaseItem)
+    }
+
     abstract class ListItem(
         open val item: List<SingleItem>,
         open val adapter: ListAdapter<SingleItem, ViewHolder>,

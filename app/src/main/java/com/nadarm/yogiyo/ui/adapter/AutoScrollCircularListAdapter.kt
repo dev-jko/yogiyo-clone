@@ -9,8 +9,9 @@ import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
 class AutoScrollCircularListAdapter(
-    private val interval: Long = 3000
-) : CircularListAdapter() {
+    private val interval: Long = 3000,
+    delegate: BaseItem.Delegate? = null
+) : CircularListAdapter(delegate) {
 
     private var autoScrollDisposable: Disposable? = null
 
@@ -48,7 +49,7 @@ class AutoScrollCircularListAdapter(
             .subscribe {
                 this.recyclerView?.smoothScrollToPosition(it)
             }
-            // TODO Error 처리 하기
+        // TODO Error 처리 하기
     }
 
     class AutoScrollListener(

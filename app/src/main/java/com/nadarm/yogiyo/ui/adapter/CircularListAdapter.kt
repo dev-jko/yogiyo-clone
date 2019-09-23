@@ -4,9 +4,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.ui.model.BaseItem
 
-open class CircularListAdapter : SingleItemListAdapter() {
+open class CircularListAdapter(
+    delegate: BaseItem.Delegate? = null
+) : SingleItemListAdapter(delegate) {
 
     protected var recyclerView: RecyclerView? = null
+    private var scrollListener: RecyclerView.OnScrollListener? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -19,9 +22,12 @@ open class CircularListAdapter : SingleItemListAdapter() {
     }
 
     private fun addScrollListener() {
-        recyclerView?.clearOnScrollListeners()
-        val listener: RecyclerView.OnScrollListener = createScrollListener()
-        recyclerView?.addOnScrollListener(listener)
+        scrollListener?.let {
+            recyclerView?.removeOnScrollListener(it)
+        }
+        scrollListener = createScrollListener().also {
+            recyclerView?.addOnScrollListener(it)
+        }
     }
 
     open fun createScrollListener() =

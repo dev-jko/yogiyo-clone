@@ -7,7 +7,9 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.ui.model.BaseItem
 
-class MultiItemAdapter : RecyclerView.Adapter<ViewHolder>() {
+class MultiItemAdapter(
+    private val delegate: BaseItem.Delegate? = null
+) : RecyclerView.Adapter<ViewHolder>() {
 
     var itemList: List<BaseItem> = emptyList()
         set(value) {
@@ -18,7 +20,7 @@ class MultiItemAdapter : RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding: ViewDataBinding = DataBindingUtil.inflate(inflater, viewType, parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, delegate)
     }
 
     override fun getItemViewType(position: Int): Int {

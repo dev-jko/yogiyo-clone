@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.nadarm.yogiyo.ui.model.BaseItem
 
-open class SingleItemListAdapter : ListAdapter<BaseItem.SingleItem, ViewHolder>(
+open class SingleItemListAdapter(
+    private val delegate: BaseItem.Delegate? = null
+) : ListAdapter<BaseItem.SingleItem, ViewHolder>(
     object : DiffUtil.ItemCallback<BaseItem.SingleItem>() {
         override fun areItemsTheSame(
             oldItem: BaseItem.SingleItem,
@@ -26,6 +28,7 @@ open class SingleItemListAdapter : ListAdapter<BaseItem.SingleItem, ViewHolder>(
     }
 ) {
 
+
     override fun getItemViewType(position: Int): Int {
         return getItem(position).getType()
     }
@@ -33,7 +36,7 @@ open class SingleItemListAdapter : ListAdapter<BaseItem.SingleItem, ViewHolder>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding: ViewDataBinding = DataBindingUtil.inflate(inflater, viewType, parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, delegate)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
