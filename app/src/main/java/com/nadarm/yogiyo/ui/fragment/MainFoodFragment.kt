@@ -7,16 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.nadarm.yogiyo.R
-import com.nadarm.yogiyo.data.cache.AdCacheDataSource
 import com.nadarm.yogiyo.data.cache.FoodCategoryCacheDataSource
-import com.nadarm.yogiyo.data.repository.AdRepository
 import com.nadarm.yogiyo.databinding.FragmentMainFoodBinding
 import com.nadarm.yogiyo.ui.adapter.AutoScrollCircularListAdapter
-import com.nadarm.yogiyo.ui.adapter.MultiItemAdapter
-import com.nadarm.yogiyo.ui.adapter.SingleItemListAdapter
+import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.*
 import com.nadarm.yogiyo.ui.viewModel.AutoScrollAdViewModel
 import javax.inject.Inject
@@ -38,7 +34,7 @@ class MainFoodFragment : BaseFragment() {
 //    lateinit var menuAdapter: ListAdapter<BaseItem, ViewHolder>
 
     @Inject
-    lateinit var topAdVm : AutoScrollAdViewModel.ViewModelImpl
+    lateinit var topAdVm: AutoScrollAdViewModel.ViewModelImpl
 
 
     override fun onCreateView(
@@ -52,13 +48,8 @@ class MainFoodFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val mainAdapter = MultiItemAdapter()
+        val mainAdapter = BaseListAdapter()
 
-
-
-        val topAdList = adRepo.getAds().map {
-            AdItem(it)
-        }
         val adAdapter = AutoScrollCircularListAdapter(delegate = object : BaseItem.Delegate {
             override fun itemClicked(item: BaseItem) {
                 if (item is AdItem) {
@@ -72,7 +63,7 @@ class MainFoodFragment : BaseFragment() {
         })
         val snapHelper = PagerSnapHelper()
 
-        val menu = SingleItemListAdapter()
+        val menu = BaseListAdapter()
         val categoryList = FoodCategoryCacheDataSource().getCategories().map {
             FoodCategoryItem(it)
         }
@@ -80,11 +71,13 @@ class MainFoodFragment : BaseFragment() {
 
 //        binding.vm = vm
         binding.mainAdapter = mainAdapter
-        mainAdapter.itemList = listOf(
-            HorizontalListItem(topAdList, adAdapter, snapHelper),
-            BaseItem.BlankItem,
-            GridListItem(categoryList, menu),
-            BaseItem.BlankItem
+        mainAdapter.submitList(
+            listOf(
+                HorizontalListItem(topAdVm.outputs.getAdList(), adAdapter, snapHelper),
+                BaseItem.BlankItem,
+                GridListItem(categoryList, menu),
+                BaseItem.BlankItem
+            )
         )
     }
 }

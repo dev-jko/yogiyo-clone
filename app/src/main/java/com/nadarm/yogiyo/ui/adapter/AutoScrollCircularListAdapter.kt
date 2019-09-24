@@ -15,7 +15,7 @@ class AutoScrollCircularListAdapter(
 
     private var autoScrollDisposable: Disposable? = null
 
-    override fun submitList(list: MutableList<BaseItem.SingleItem>?) {
+    override fun submitList(list: MutableList<BaseItem>?) {
         super.submitList(list)
         if (itemCount > 1) {
             autoScroll(1)

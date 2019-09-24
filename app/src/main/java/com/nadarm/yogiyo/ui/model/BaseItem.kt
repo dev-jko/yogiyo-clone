@@ -33,8 +33,8 @@ sealed class BaseItem {
     }
 
     abstract class ListItem(
-        open val item: List<SingleItem>,
-        open val adapter: ListAdapter<SingleItem, ViewHolder>,
+        open val item: List<BaseItem>,
+        open val adapter: ListAdapter<BaseItem, ViewHolder>,
         open val snapHelper: SnapHelper? = null
     ) : BaseItem()
 
@@ -47,14 +47,14 @@ sealed class BaseItem {
 }
 
 data class HorizontalListItem(
-    override val item: List<SingleItem>,
-    override val adapter: ListAdapter<SingleItem, ViewHolder>,
+    override val item: List<BaseItem>,
+    override val adapter: ListAdapter<BaseItem, ViewHolder>,
     override val snapHelper: SnapHelper? = null
 ) : BaseItem.ListItem(item, adapter, snapHelper)
 
 data class GridListItem(
-    override val item: List<SingleItem>,
-    override val adapter: ListAdapter<SingleItem, ViewHolder>,
+    override val item: List<BaseItem>,
+    override val adapter: ListAdapter<BaseItem, ViewHolder>,
     override val snapHelper: SnapHelper? = null
 ) : BaseItem.ListItem(item, adapter, snapHelper)
 

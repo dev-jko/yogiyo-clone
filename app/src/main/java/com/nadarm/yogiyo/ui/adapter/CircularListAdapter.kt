@@ -6,15 +6,9 @@ import com.nadarm.yogiyo.ui.model.BaseItem
 
 open class CircularListAdapter(
     delegate: BaseItem.Delegate? = null
-) : SingleItemListAdapter(delegate) {
+) : BaseListAdapter(delegate) {
 
-    protected var recyclerView: RecyclerView? = null
     private var scrollListener: RecyclerView.OnScrollListener? = null
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        this.recyclerView = recyclerView
-    }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
@@ -33,7 +27,7 @@ open class CircularListAdapter(
     open fun createScrollListener() =
         CircularScrollListener(itemCount, recyclerView?.layoutManager as LinearLayoutManager)
 
-    override fun submitList(list: MutableList<BaseItem.SingleItem>?) {
+    override fun submitList(list: MutableList<BaseItem>?) {
         if (list?.size!! > 1) {
             list.add(0, list.last())
             list.add(list[1])
