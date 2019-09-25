@@ -73,9 +73,9 @@ class MainFoodFragment : BaseFragment() {
         binding.mainAdapter = mainAdapter
         mainAdapter.submitList(
             listOf(
-                HorizontalListItem(topAdVm.outputs.getAdList(), adAdapter, snapHelper),
+                HorizontalListItem(topAdVm.outputs.getAdItemList(), adAdapter, snapHelper),
                 BaseItem.BlankItem,
-                GridListItem(categoryList, menu),
+//                GridListItem(categoryList, menu),
                 BaseItem.BlankItem
             )
         )

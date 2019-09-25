@@ -16,7 +16,7 @@ interface AutoScrollAdViewModel {
     interface Inputs : BaseItem.Delegate
 
     interface Outputs {
-        fun getAdList(): LiveData<List<AdItem>>
+        fun getAdItemList(): LiveData<List<BaseItem>>
     }
 
     @Singleton
@@ -25,13 +25,23 @@ interface AutoScrollAdViewModel {
     ) : BaseViewModel(), Inputs, Outputs {
 
         private val adListLiveData: MutableLiveData<List<Ad>> =
-            MutableLiveData<List<Ad>>().also { it.postValue(adRepository.getAds()) }
+            MutableLiveData<List<Ad>>().apply {
+                this.value = adRepository.getAds() }
 
         val inputs: Inputs = this
         val outputs: Outputs = this
 
-        override fun getAdList(): LiveData<List<AdItem>> {
-            Transformations.map(adListLiveData) { ads -> ads.map { AdItem(it) } }
+//        override fun getAdItemList(): LiveData<List<BaseItem>> {
+//            return Transformations.map(adListLiveData) { ads -> ads.map { AdItem(it) } }
+//        }
+        override fun getAdItemList(): LiveData<List<BaseItem>> {
+            val result = Transformations.map(adListLiveData) { ads ->
+                // TODO ads==null 값 안들어오는 이유 찾기
+                println(ads)
+                ads.map { AdItem(it) }
+            }
+            println(result.value)
+            return result as LiveData<List<BaseItem>>
         }
 
         override fun itemClicked(item: BaseItem) {

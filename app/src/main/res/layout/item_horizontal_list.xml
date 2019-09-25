@@ -15,12 +15,12 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            bindAdapter="@{item.adapter}"
-            bindList="@{item.item}"
-            bindSnapHelper="@{item.snapHelper}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            app:bindAdapter="@{item.adapter}"
+            app:bindList="@{item.item}"
+            app:bindSnapHelper="@{item.snapHelper}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </LinearLayout>

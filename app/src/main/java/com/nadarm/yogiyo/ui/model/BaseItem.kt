@@ -1,9 +1,9 @@
 package com.nadarm.yogiyo.ui.model
 
-import androidx.recyclerview.widget.ListAdapter
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.SnapHelper
 import com.nadarm.yogiyo.R
-import com.nadarm.yogiyo.ui.adapter.ViewHolder
+import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 
 sealed class BaseItem {
 
@@ -33,8 +33,8 @@ sealed class BaseItem {
     }
 
     abstract class ListItem(
-        open val item: List<BaseItem>,
-        open val adapter: ListAdapter<BaseItem, ViewHolder>,
+        open val item: LiveData<List<BaseItem>>,
+        open val adapter: BaseListAdapter,
         open val snapHelper: SnapHelper? = null
     ) : BaseItem()
 
@@ -47,14 +47,14 @@ sealed class BaseItem {
 }
 
 data class HorizontalListItem(
-    override val item: List<BaseItem>,
-    override val adapter: ListAdapter<BaseItem, ViewHolder>,
+    override val item: LiveData<List<BaseItem>>,
+    override val adapter: BaseListAdapter,
     override val snapHelper: SnapHelper? = null
 ) : BaseItem.ListItem(item, adapter, snapHelper)
 
 data class GridListItem(
-    override val item: List<BaseItem>,
-    override val adapter: ListAdapter<BaseItem, ViewHolder>,
+    override val item: LiveData<List<BaseItem>>,
+    override val adapter: BaseListAdapter,
     override val snapHelper: SnapHelper? = null
 ) : BaseItem.ListItem(item, adapter, snapHelper)
 

@@ -28,13 +28,15 @@ open class CircularListAdapter(
         CircularScrollListener(itemCount, recyclerView?.layoutManager as LinearLayoutManager)
 
     override fun submitList(list: MutableList<BaseItem>?) {
-        if (list?.size!! > 1) {
+        if (list != null && list.size > 1) {
             list.add(0, list.last())
             list.add(list[1])
         }
         super.submitList(list)
-        addScrollListener()
-        recyclerView?.scrollToPosition(1)
+        if (list != null && list.size > 1) {
+            addScrollListener()
+            recyclerView?.scrollToPosition(1)
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

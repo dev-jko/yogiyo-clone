@@ -2,12 +2,10 @@ package com.nadarm.yogiyo.util
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.bumptech.glide.Glide
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
-import com.nadarm.yogiyo.ui.adapter.ViewHolder
 import com.nadarm.yogiyo.ui.model.BaseItem
 
 
@@ -24,16 +22,14 @@ fun bindImage(view: ImageView, imageUrl: String) {
 @BindingAdapter("bindAdapter", "bindList", requireAll = true)
 fun bindList(
     view: RecyclerView,
-    adapter: ListAdapter<BaseItem, ViewHolder>,
-    newList: List<BaseItem.SingleItem>
+    adapter: BaseListAdapter,
+    newList: List<BaseItem>?
 ) {
+    if (view.adapter != adapter) {
+        view.adapter = adapter
+        adapter.recyclerView = view
+    }
     adapter.submitList(newList)
-}
-
-@BindingAdapter("bindAdapter")
-fun bindAdapter(view: RecyclerView, adapter: BaseListAdapter) {
-    view.adapter = adapter
-    adapter.recyclerView = view
 }
 
 @BindingAdapter("bindSnapHelper")
