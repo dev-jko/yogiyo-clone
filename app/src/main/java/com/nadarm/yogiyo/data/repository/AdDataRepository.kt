@@ -1,6 +1,7 @@
 package com.nadarm.yogiyo.data.repository
 
 import com.nadarm.yogiyo.ui.model.Ad
+import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,7 +11,7 @@ class AdDataRepository @Inject constructor(
 ) : AdRepository {
 
 
-    override fun getAds(): List<Ad> {
-        return cache.getAds()
+    override fun getAds(type: Int): Single<List<Ad>> {
+        return cache.getAds(type)
     }
 }

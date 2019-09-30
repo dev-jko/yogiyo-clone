@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="vm"
-            type="com.nadarm.yogiyo.ui.viewModel.AutoScrollAdViewModel.ViewModelImpl" />
-
-        <variable
             name="mainAdapter"
             type="androidx.recyclerview.widget.RecyclerView.Adapter" />
     </data>

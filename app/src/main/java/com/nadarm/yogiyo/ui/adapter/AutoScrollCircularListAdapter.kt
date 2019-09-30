@@ -17,7 +17,7 @@ class AutoScrollCircularListAdapter(
 
     override fun submitList(list: MutableList<BaseItem>?) {
         super.submitList(list)
-        if (itemCount > 1) {
+        if (itemCount > 1 && recyclerView != null) {
             autoScroll(1)
         }
     }

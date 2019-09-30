@@ -1,51 +1,60 @@
 package com.nadarm.yogiyo.ui.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import com.nadarm.yogiyo.data.repository.AdRepository
-import com.nadarm.yogiyo.ui.model.Ad
 import com.nadarm.yogiyo.ui.model.AdItem
 import com.nadarm.yogiyo.ui.model.BaseItem
+import io.reactivex.Flowable
+import io.reactivex.processors.BehaviorProcessor
+import io.reactivex.processors.PublishProcessor
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import javax.inject.Singleton
 
 
 interface AutoScrollAdViewModel {
 
-    interface Inputs : BaseItem.Delegate
-
-    interface Outputs {
-        fun getAdItemList(): LiveData<List<BaseItem>>
+    interface Inputs : BaseItem.Delegate {
+        fun setAdType(type: Int)
     }
 
-    @Singleton
+    interface Outputs {
+        fun adItemList(): Flowable<List<BaseItem>>
+    }
+
     class ViewModelImpl @Inject constructor(
         private val adRepository: AdRepository
     ) : BaseViewModel(), Inputs, Outputs {
 
-        private val adListLiveData: MutableLiveData<List<Ad>> =
-            MutableLiveData<List<Ad>>().apply {
-                this.value = adRepository.getAds() }
+        private val itemClicked: PublishProcessor<BaseItem> = PublishProcessor.create()
+        private val adType: PublishProcessor<Int> = PublishProcessor.create()
+
+        private val adItemList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
 
         val inputs: Inputs = this
         val outputs: Outputs = this
 
-//        override fun getAdItemList(): LiveData<List<BaseItem>> {
-//            return Transformations.map(adListLiveData) { ads -> ads.map { AdItem(it) } }
-//        }
-        override fun getAdItemList(): LiveData<List<BaseItem>> {
-            val result = Transformations.map(adListLiveData) { ads ->
-                // TODO ads==null 값 안들어오는 이유 찾기
-                println(ads)
-                ads.map { AdItem(it) }
+        init {
+
+            adType.flatMapSingle { type ->
+                adRepository.getAds(type)
+                    .map { list ->
+                        list.map { ad -> AdItem(ad) as BaseItem }
+                    }.subscribeOn(Schedulers.io())
             }
-            println(result.value)
-            return result as LiveData<List<BaseItem>>
+                .subscribe { adItemList.onNext(it) }
+                .addTo(compositeDisposable)
+
+
         }
 
+        override fun adItemList(): Flowable<List<BaseItem>> = adItemList
+
         override fun itemClicked(item: BaseItem) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            itemClicked.onNext(item)
+        }
+
+        override fun setAdType(type: Int) {
+            adType.onNext(type)
         }
     }
 

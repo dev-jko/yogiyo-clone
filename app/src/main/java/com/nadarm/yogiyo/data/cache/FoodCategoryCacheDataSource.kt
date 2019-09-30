@@ -2,6 +2,7 @@ package com.nadarm.yogiyo.data.cache
 
 import com.nadarm.yogiyo.data.repository.FoodCategoryDataSource
 import com.nadarm.yogiyo.ui.model.FoodCategory
+import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,12 +18,16 @@ class FoodCategoryCacheDataSource @Inject constructor() : FoodCategoryDataSource
                 FoodCategory(1, "https://i.imgur.com/Kut64BP.png"),
                 FoodCategory(2, "https://i.imgur.com/Q76LlXx.png"),
                 FoodCategory(3, "https://i.imgur.com/TKuUeDn.png"),
+                FoodCategory(4, "https://i.imgur.com/mA5Rco5.png"),
+                FoodCategory(1, "https://i.imgur.com/Kut64BP.png"),
+                FoodCategory(2, "https://i.imgur.com/Q76LlXx.png"),
+                FoodCategory(3, "https://i.imgur.com/TKuUeDn.png"),
                 FoodCategory(4, "https://i.imgur.com/mA5Rco5.png")
             )
         )
     }
 
-    override fun getCategories(): List<FoodCategory> {
-        return categories
+    override fun getCategories(): Single<List<FoodCategory>> {
+        return Single.just(categories)
     }
 }

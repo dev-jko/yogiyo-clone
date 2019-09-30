@@ -20,7 +20,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:bindAdapter="@{item.adapter}"
-            app:bindList="@{item.item}"
             app:bindSnapHelper="@{item.snapHelper}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="3" />

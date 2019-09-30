@@ -1,6 +1,5 @@
 package com.nadarm.yogiyo.ui.model
 
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.SnapHelper
 import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
@@ -21,9 +20,13 @@ sealed class BaseItem {
         return when (this) {
             is HorizontalListItem -> R.layout.item_horizontal_list
             is GridListItem -> R.layout.item_grid_list
-            is AdItem -> R.layout.item_top_ad
             is FoodCategoryItem -> R.layout.item_food_category
             is BlankItem -> R.layout.item_blank
+            is AdItem -> when (item.type) {
+                Ad.top -> R.layout.item_top_ad
+                Ad.bottom -> R.layout.item_bottom_ad
+                else -> -1
+            }
             else -> -1
         }
     }
@@ -33,7 +36,6 @@ sealed class BaseItem {
     }
 
     abstract class ListItem(
-        open val item: LiveData<List<BaseItem>>,
         open val adapter: BaseListAdapter,
         open val snapHelper: SnapHelper? = null
     ) : BaseItem()
@@ -47,16 +49,14 @@ sealed class BaseItem {
 }
 
 data class HorizontalListItem(
-    override val item: LiveData<List<BaseItem>>,
     override val adapter: BaseListAdapter,
     override val snapHelper: SnapHelper? = null
-) : BaseItem.ListItem(item, adapter, snapHelper)
+) : BaseItem.ListItem(adapter, snapHelper)
 
 data class GridListItem(
-    override val item: LiveData<List<BaseItem>>,
     override val adapter: BaseListAdapter,
     override val snapHelper: SnapHelper? = null
-) : BaseItem.ListItem(item, adapter, snapHelper)
+) : BaseItem.ListItem(adapter, snapHelper)
 
 data class AdItem(override val item: Ad) : BaseItem.SingleItem(item)
 data class FoodCategoryItem(override val item: FoodCategory) : BaseItem.SingleItem(item)

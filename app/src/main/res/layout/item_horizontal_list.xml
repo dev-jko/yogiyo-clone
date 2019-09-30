@@ -19,7 +19,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:bindAdapter="@{item.adapter}"
-            app:bindList="@{item.item}"
             app:bindSnapHelper="@{item.snapHelper}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 

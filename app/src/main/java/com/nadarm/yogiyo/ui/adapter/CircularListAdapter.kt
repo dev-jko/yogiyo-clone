@@ -34,8 +34,10 @@ open class CircularListAdapter(
         }
         super.submitList(list)
         if (list != null && list.size > 1) {
-            addScrollListener()
-            recyclerView?.scrollToPosition(1)
+            recyclerView?.let {
+                addScrollListener()
+                it.scrollToPosition(1)
+            }
         }
     }
 
