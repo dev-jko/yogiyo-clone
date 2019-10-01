@@ -1,8 +1,8 @@
 package com.nadarm.yogiyo.ui.viewModel
 
-import com.nadarm.yogiyo.data.repository.FoodCategoryRepository
+import com.nadarm.yogiyo.data.repository.RestaurantRepository
 import com.nadarm.yogiyo.ui.model.BaseItem
-import com.nadarm.yogiyo.ui.model.FoodCategoryItem
+import com.nadarm.yogiyo.ui.model.RestaurantItem
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
@@ -10,35 +10,35 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 
-interface FoodCategoryViewModel {
+interface RestaurantViewModel {
 
     interface Inputs : BaseItem.Delegate
 
     interface Outputs {
-        fun foodCategoryList(): Flowable<List<BaseItem>>
+        fun restaurantList(): Flowable<List<BaseItem>>
     }
 
     class ViewModelImpl @Inject constructor(
-        private val foodCategoryRepo: FoodCategoryRepository
+        private val restaurantRepo: RestaurantRepository
     ) : BaseViewModel(), Inputs, Outputs {
 
         private val itemClicked: PublishProcessor<BaseItem> = PublishProcessor.create()
 
-        private val foodCategoryList: BehaviorProcessor<List<BaseItem>> =
-            BehaviorProcessor.create()
+        private val restaurantList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
 
         val inputs: Inputs = this
         val outputs: Outputs = this
 
         init {
-            foodCategoryRepo.getCategories()
-                .map { it.map { foodCategory -> FoodCategoryItem(foodCategory) as BaseItem } }
-                .subscribeBy { foodCategoryList.onNext(it) }
+
+            restaurantRepo.getRestaurants()
+                .map { it.map { item -> RestaurantItem(item) as BaseItem } }
+                .subscribeBy { restaurantList.onNext(it) }
                 .addTo(compositeDisposable)
 
         }
 
-        override fun foodCategoryList(): Flowable<List<BaseItem>> = foodCategoryList
+        override fun restaurantList(): Flowable<List<BaseItem>> = restaurantList
 
         override fun itemClicked(item: BaseItem) {
             itemClicked.onNext(item)

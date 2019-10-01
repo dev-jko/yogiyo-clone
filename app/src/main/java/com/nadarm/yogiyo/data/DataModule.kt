@@ -2,6 +2,7 @@ package com.nadarm.yogiyo.data
 
 import com.nadarm.yogiyo.data.cache.AdCacheDataSource
 import com.nadarm.yogiyo.data.cache.FoodCategoryCacheDataSource
+import com.nadarm.yogiyo.data.cache.RestaurantCacheDataSource
 import com.nadarm.yogiyo.data.repository.*
 import dagger.Binds
 import dagger.Module
@@ -26,6 +27,13 @@ interface DataBindingModule {
     @Binds
     fun bindAdCacheDataSource(dataSource: AdCacheDataSource): AdDataSource.Cache
 
+    @Singleton
+    @Binds
+    fun bindRestaurantRepository(repository: RestaurantDataRepository): RestaurantRepository
+
+    @Singleton
+    @Binds
+    fun bindRestaurantCacheDataSource(dataSource: RestaurantCacheDataSource): RestaurantDataSource.Cache
 }
 
 @Module

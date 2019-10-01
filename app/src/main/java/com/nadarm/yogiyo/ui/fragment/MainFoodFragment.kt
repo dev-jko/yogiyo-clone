@@ -10,12 +10,10 @@ import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.databinding.FragmentMainFoodBinding
 import com.nadarm.yogiyo.ui.adapter.AutoScrollCircularListAdapter
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
-import com.nadarm.yogiyo.ui.model.Ad
-import com.nadarm.yogiyo.ui.model.BaseItem
-import com.nadarm.yogiyo.ui.model.GridListItem
-import com.nadarm.yogiyo.ui.model.HorizontalListItem
+import com.nadarm.yogiyo.ui.model.*
 import com.nadarm.yogiyo.ui.viewModel.AutoScrollAdViewModel
 import com.nadarm.yogiyo.ui.viewModel.FoodCategoryViewModel
+import com.nadarm.yogiyo.ui.viewModel.RestaurantViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -41,6 +39,8 @@ class MainFoodFragment : BaseFragment() {
     lateinit var foodCategoryVm: FoodCategoryViewModel.ViewModelImpl
     @Inject
     lateinit var bottomAdVm: AutoScrollAdViewModel.ViewModelImpl
+    @Inject
+    lateinit var plusPopularVm: RestaurantViewModel.ViewModelImpl
 
     private val mainAdapter: BaseListAdapter = BaseListAdapter()
     private val topAdAdapter: AutoScrollCircularListAdapter by lazy {
@@ -51,6 +51,9 @@ class MainFoodFragment : BaseFragment() {
     }
     private val bottomAdAdapter: AutoScrollCircularListAdapter by lazy {
         AutoScrollCircularListAdapter(delegate = bottomAdVm)
+    }
+    private val plusPopularAdapter: BaseListAdapter by lazy {
+        BaseListAdapter(delegate = plusPopularVm)
     }
 
 
@@ -79,6 +82,8 @@ class MainFoodFragment : BaseFragment() {
                 GridListItem(foodCategoryAdapter),
                 BaseItem.BlankItem,
                 HorizontalListItem(bottomAdAdapter, bottomAdSnapHelper),
+                BaseItem.BlankItem,
+                PlusPopularRestaurantListItem(plusPopularAdapter),
                 BaseItem.BlankItem
             )
         )
@@ -104,6 +109,14 @@ class MainFoodFragment : BaseFragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 this.submitList(it, bottomAdAdapter)
+            }
+            .addTo(compositeDisposable)
+
+        plusPopularVm.outputs.restaurantList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                this.submitList(it, plusPopularAdapter)
             }
             .addTo(compositeDisposable)
 

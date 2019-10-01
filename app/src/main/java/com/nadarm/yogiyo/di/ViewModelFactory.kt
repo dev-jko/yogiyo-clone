@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.nadarm.yogiyo.ui.viewModel.AutoScrollAdViewModel
 import com.nadarm.yogiyo.ui.viewModel.FoodCategoryViewModel
+import com.nadarm.yogiyo.ui.viewModel.RestaurantViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -43,4 +44,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FoodCategoryViewModel.ViewModelImpl::class)
     internal abstract fun bindFoodCategoryViewModel(viewModel: FoodCategoryViewModel.ViewModelImpl): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RestaurantViewModel.ViewModelImpl::class)
+    internal abstract fun bindRestaurantViewModel(viewModel: RestaurantViewModel.ViewModelImpl): ViewModel
 }
