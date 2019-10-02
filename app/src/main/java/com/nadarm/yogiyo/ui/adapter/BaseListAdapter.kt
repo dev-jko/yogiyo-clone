@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.ui.model.BaseItem
 
 open class BaseListAdapter(
-    private val delegate: BaseItem.Delegate? = null
+    private val delegate: Delegate? = null
 ) : ListAdapter<BaseItem, ViewHolder>(
     object : DiffUtil.ItemCallback<BaseItem>() {
         override fun areItemsTheSame(
@@ -29,7 +29,13 @@ open class BaseListAdapter(
     }
 ) {
 
-    var recyclerView: RecyclerView? = null
+    private var recyclerView: RecyclerView? = null
+
+    protected fun getRecyclerView(): RecyclerView? = recyclerView
+
+    open fun setRecyclerView(recyclerView: RecyclerView) {
+        this.recyclerView = recyclerView
+    }
 
     override fun getItemViewType(position: Int): Int {
         return getItem(position).getType()
@@ -43,7 +49,13 @@ open class BaseListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
+        if (item is BaseItem.ListItem) {
+            holder.bind()
+        }
         holder.bind(item)
     }
 
+    interface Delegate {
+        fun itemClicked(item: BaseItem)
+    }
 }

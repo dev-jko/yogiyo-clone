@@ -19,6 +19,7 @@
         tools:context=".ui.fragment.MainFoodFragment">
 
         <LinearLayout
+            android:layout_marginBottom="1dp"
             android:id="@+id/topBarLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="60dp"

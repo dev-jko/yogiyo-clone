@@ -41,6 +41,8 @@ class MainFoodFragment : BaseFragment() {
     lateinit var bottomAdVm: AutoScrollAdViewModel.ViewModelImpl
     @Inject
     lateinit var plusPopularVm: RestaurantViewModel.ViewModelImpl
+    @Inject
+    lateinit var plusNewVm: RestaurantViewModel.ViewModelImpl
 
     private val mainAdapter: BaseListAdapter = BaseListAdapter()
     private val topAdAdapter: AutoScrollCircularListAdapter by lazy {
@@ -54,6 +56,9 @@ class MainFoodFragment : BaseFragment() {
     }
     private val plusPopularAdapter: BaseListAdapter by lazy {
         BaseListAdapter(delegate = plusPopularVm)
+    }
+    private val plusNewAdapter: BaseListAdapter by lazy {
+        BaseListAdapter(delegate = plusNewVm)
     }
 
 
@@ -84,6 +89,13 @@ class MainFoodFragment : BaseFragment() {
                 HorizontalListItem(bottomAdAdapter, bottomAdSnapHelper),
                 BaseItem.BlankItem,
                 PlusPopularRestaurantListItem(plusPopularAdapter),
+                BaseItem.BlankItem,
+                PlusNewRestaurantListItem(plusNewAdapter),
+                BaseItem.BlankItem,
+                BaseItem.BlankItem,BaseItem.BlankItem,
+                BaseItem.BlankItem,BaseItem.BlankItem,
+                BaseItem.BlankItem,BaseItem.BlankItem,
+                BaseItem.BlankItem,BaseItem.BlankItem,
                 BaseItem.BlankItem
             )
         )
@@ -117,6 +129,14 @@ class MainFoodFragment : BaseFragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 this.submitList(it, plusPopularAdapter)
+            }
+            .addTo(compositeDisposable)
+
+        plusNewVm.outputs.restaurantList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                this.submitList(it, plusNewAdapter)
             }
             .addTo(compositeDisposable)
 

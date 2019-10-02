@@ -5,27 +5,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.ui.model.BaseItem
 
 open class CircularListAdapter(
-    delegate: BaseItem.Delegate? = null
+    delegate: Delegate? = null
 ) : BaseListAdapter(delegate) {
 
-    private var scrollListener: RecyclerView.OnScrollListener? = null
+    private var scrollListener: CircularScrollListener? = null
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
-        this.recyclerView = null
-    }
+//    override fun setRecyclerView(recyclerView: RecyclerView) {
+//        super.setRecyclerView(recyclerView)
+//        addScrollListener()
+//    }
 
     private fun addScrollListener() {
         scrollListener?.let {
-            recyclerView?.removeOnScrollListener(it)
+            getRecyclerView()?.removeOnScrollListener(it)
         }
         scrollListener = createScrollListener().also {
-            recyclerView?.addOnScrollListener(it)
+            getRecyclerView()?.addOnScrollListener(it)
         }
     }
 
     open fun createScrollListener() =
-        CircularScrollListener(itemCount, recyclerView?.layoutManager as LinearLayoutManager)
+        CircularScrollListener(itemCount, getRecyclerView()?.layoutManager as LinearLayoutManager)
 
     override fun submitList(list: MutableList<BaseItem>?) {
         if (list != null && list.size > 1) {
@@ -34,7 +34,7 @@ open class CircularListAdapter(
         }
         super.submitList(list)
         if (list != null && list.size > 1) {
-            recyclerView?.let {
+            getRecyclerView()?.let {
                 addScrollListener()
                 it.scrollToPosition(1)
             }
@@ -46,9 +46,12 @@ open class CircularListAdapter(
         super.onBindViewHolder(holder, pos)
     }
 
+    interface Delegate : BaseListAdapter.Delegate {
+        fun listScrolled()
+    }
 
     open class CircularScrollListener(
-        private val itemCount: Int,
+        open var itemCount: Int,
         private val layoutManager: LinearLayoutManager
     ) : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

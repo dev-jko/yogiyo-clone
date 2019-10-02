@@ -22,6 +22,7 @@ sealed class BaseItem {
             is HorizontalListItem -> R.layout.item_horizontal_list
             is GridListItem -> R.layout.item_grid_list
             is PlusPopularRestaurantListItem -> R.layout.item_plus_popular_restaurant_list
+            is PlusNewRestaurantListItem -> R.layout.item_plus_new_restaurant_list
             is FoodCategoryItem -> R.layout.item_food_category
             is AdItem -> when (item.type) {
                 Ad.top -> R.layout.item_top_ad
@@ -35,10 +36,6 @@ sealed class BaseItem {
             }
             else -> R.layout.item_blank
         }
-    }
-
-    interface Delegate {
-        fun itemClicked(item: BaseItem)
     }
 
     abstract class ListItem(
@@ -60,6 +57,11 @@ data class HorizontalListItem(
 ) : BaseItem.ListItem(adapter, snapHelper)
 
 data class PlusPopularRestaurantListItem(
+    override val adapter: BaseListAdapter,
+    override val snapHelper: SnapHelper? = null
+) : BaseItem.ListItem(adapter, snapHelper)
+
+data class PlusNewRestaurantListItem(
     override val adapter: BaseListAdapter,
     override val snapHelper: SnapHelper? = null
 ) : BaseItem.ListItem(adapter, snapHelper)

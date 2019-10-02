@@ -1,6 +1,7 @@
 package com.nadarm.yogiyo.ui.viewModel
 
 import com.nadarm.yogiyo.data.repository.AdRepository
+import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.AdItem
 import com.nadarm.yogiyo.ui.model.BaseItem
 import io.reactivex.Flowable
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 interface AutoScrollAdViewModel {
 
-    interface Inputs : BaseItem.Delegate {
+    interface Inputs : BaseListAdapter.Delegate {
         fun setAdType(type: Int)
     }
 

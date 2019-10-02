@@ -1,6 +1,7 @@
 package com.nadarm.yogiyo.ui.viewModel
 
 import com.nadarm.yogiyo.data.repository.FoodCategoryRepository
+import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.BaseItem
 import com.nadarm.yogiyo.ui.model.FoodCategoryItem
 import io.reactivex.Flowable
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 interface FoodCategoryViewModel {
 
-    interface Inputs : BaseItem.Delegate
+    interface Inputs : BaseListAdapter.Delegate
 
     interface Outputs {
         fun foodCategoryList(): Flowable<List<BaseItem>>
