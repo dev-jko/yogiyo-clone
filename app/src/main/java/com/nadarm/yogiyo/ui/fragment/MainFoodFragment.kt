@@ -25,13 +25,13 @@ class MainFoodFragment : BaseFragment() {
     private lateinit var binding: FragmentMainFoodBinding
 
 //    @Inject
-//    lateinit var mainAdapter: RecyclerView.Adapter<ViewHolder>
+//    lateinit var mainAdapter: RecyclerView.Adapter<ItemViewHolder>
 //
 //    @Inject
-//    lateinit var topAdAdapter: ListAdapter<BaseItem, ViewHolder>
+//    lateinit var topAdAdapter: ListAdapter<BaseItem, ItemViewHolder>
 //
 //    @Inject
-//    lateinit var foodCategoryAdapter: ListAdapter<BaseItem, ViewHolder>
+//    lateinit var foodCategoryAdapter: ListAdapter<BaseItem, ItemViewHolder>
 
     @Inject
     lateinit var topAdVm: AutoScrollAdViewModel.ViewModelImpl
@@ -82,20 +82,20 @@ class MainFoodFragment : BaseFragment() {
 
         mainAdapter.submitList(
             listOf(
-                HorizontalListItem(topAdAdapter, topAdSnapHelper),
+                HorizontalList(topAdAdapter, topAdSnapHelper),
                 BaseItem.BlankItem,
-                GridListItem(foodCategoryAdapter),
+                GridList(foodCategoryAdapter, null),
                 BaseItem.BlankItem,
-                HorizontalListItem(bottomAdAdapter, bottomAdSnapHelper),
+                HorizontalList(bottomAdAdapter, bottomAdSnapHelper),
                 BaseItem.BlankItem,
-                PlusPopularRestaurantListItem(plusPopularAdapter),
+                PlusPopularRestaurantList(plusPopularAdapter, null),
                 BaseItem.BlankItem,
-                PlusNewRestaurantListItem(plusNewAdapter),
+                PlusNewRestaurantList(plusNewAdapter, null),
                 BaseItem.BlankItem,
-                BaseItem.BlankItem,BaseItem.BlankItem,
-                BaseItem.BlankItem,BaseItem.BlankItem,
-                BaseItem.BlankItem,BaseItem.BlankItem,
-                BaseItem.BlankItem,BaseItem.BlankItem,
+                BaseItem.BlankItem, BaseItem.BlankItem,
+                BaseItem.BlankItem, BaseItem.BlankItem,
+                BaseItem.BlankItem, BaseItem.BlankItem,
+                BaseItem.BlankItem, BaseItem.BlankItem,
                 BaseItem.BlankItem
             )
         )
@@ -107,6 +107,7 @@ class MainFoodFragment : BaseFragment() {
                 this.submitList(it, topAdAdapter)
             }
             .addTo(compositeDisposable)
+
 
         foodCategoryVm.outputs.foodCategoryList()
             .subscribeOn(Schedulers.io())
@@ -140,8 +141,8 @@ class MainFoodFragment : BaseFragment() {
             }
             .addTo(compositeDisposable)
 
-        topAdVm.inputs.setAdType(Ad.top)
-        bottomAdVm.inputs.setAdType(Ad.bottom)
+        topAdVm.inputs.setAdType(Ad.Type.Large)
+        bottomAdVm.inputs.setAdType(Ad.Type.Small)
 
     }
 

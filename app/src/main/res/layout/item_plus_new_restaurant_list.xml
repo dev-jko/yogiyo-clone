@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="com.nadarm.yogiyo.ui.model.PlusNewRestaurantListItem" />
+            type="com.nadarm.yogiyo.ui.model.PlusNewRestaurantList" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,13 +17,13 @@
         android:paddingBottom="10dp">
 
         <ImageView
-            android:id="@+id/plus_new_logo"
+            android:id="@+id/plusNewLogo"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:scaleType="fitStart"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toTopOf="@id/plus_new_recycler_view"
+            android:scaleType="fitStart"
+            app:layout_constraintBottom_toTopOf="@id/recyclerView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,17 +31,18 @@
             app:srcCompat="@drawable/yogiyo_plus_new_logo" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/plus_new_recycler_view"
+            android:id="@+id/recyclerView"
             bindAdapter="@{item.adapter}"
             bindSnapHelper="@{item.snapHelper}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:tag="recyclerView"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/plus_new_logo" />
+            app:layout_constraintTop_toBottomOf="@id/plusNewLogo" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

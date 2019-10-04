@@ -11,7 +11,7 @@ class AdDataRepository @Inject constructor(
 ) : AdRepository {
 
 
-    override fun getAds(type: Int): Single<List<Ad>> {
+    override fun getAds(type: Ad.Type): Single<List<Ad>> {
         return cache.getAds(type)
     }
 }

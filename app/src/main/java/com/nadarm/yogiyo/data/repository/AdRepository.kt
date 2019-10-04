@@ -5,7 +5,7 @@ import io.reactivex.Single
 
 interface AdRepository {
 
-    fun getAds(type: Int): Single<List<Ad>>
+    fun getAds(type: Ad.Type): Single<List<Ad>>
 }
 
 interface AdDataSource : AdRepository {

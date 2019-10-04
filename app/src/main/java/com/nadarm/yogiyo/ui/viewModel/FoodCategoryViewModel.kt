@@ -3,7 +3,6 @@ package com.nadarm.yogiyo.ui.viewModel
 import com.nadarm.yogiyo.data.repository.FoodCategoryRepository
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.BaseItem
-import com.nadarm.yogiyo.ui.model.FoodCategoryItem
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
@@ -33,7 +32,6 @@ interface FoodCategoryViewModel {
 
         init {
             foodCategoryRepo.getCategories()
-                .map { it.map { foodCategory -> FoodCategoryItem(foodCategory) as BaseItem } }
                 .subscribeBy { foodCategoryList.onNext(it) }
                 .addTo(compositeDisposable)
 

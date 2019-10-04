@@ -6,11 +6,11 @@
 
         <variable
             name="item"
-            type="com.nadarm.yogiyo.ui.model.AdItem" />
+            type="com.nadarm.yogiyo.ui.model.Ad" />
 
         <variable
             name="delegate"
-            type="com.nadarm.yogiyo.ui.model.BaseItem.Delegate" />
+            type="com.nadarm.yogiyo.ui.adapter.BaseListAdapter.Delegate" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,7 @@
         android:orientation="vertical">
 
         <ImageView
-            bindImage="@{item.item.imageUrl}"
+            bindImage="@{item.imageUrl}"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:scaleType="fitXY"

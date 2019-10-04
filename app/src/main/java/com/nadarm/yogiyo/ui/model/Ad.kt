@@ -2,12 +2,14 @@ package com.nadarm.yogiyo.ui.model
 
 data class Ad(
     val id: Long,
-    val type: Int,
+    val type: Type,
     val imageUrl: String,
     val pageUrl: String
-) {
-    companion object {
-        const val top: Int = 1
-        const val bottom: Int = 2
+) : BaseItem.SingleItem() {
+
+    enum class Type {
+        Large,
+        Small
     }
+
 }

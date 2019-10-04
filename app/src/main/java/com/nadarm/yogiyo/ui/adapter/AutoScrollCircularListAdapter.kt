@@ -72,14 +72,14 @@ class AutoScrollCircularListAdapter(
     }
 
     interface Delegate : CircularListAdapter.Delegate {
-        fun listScrolled(state: Int)
     }
 
     class AutoScrollListener(
         override var itemCount: Int,
         private val layoutManager: LinearLayoutManager,
-        private val stateChanged: (Int, LinearLayoutManager) -> Unit
-    ) : CircularScrollListener(itemCount, layoutManager) {
+        private val stateChanged: (Int, LinearLayoutManager) -> Unit,
+        private val delegate: CircularListAdapter.Delegate
+    ) : CircularScrollListener(itemCount, layoutManager, delegate) {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             stateChanged(newState, layoutManager)

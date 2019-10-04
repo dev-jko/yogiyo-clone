@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.ui.model.BaseItem
 
 open class CircularListAdapter(
-    delegate: Delegate? = null
+    private val delegate: Delegate? = null
 ) : BaseListAdapter(delegate) {
 
     private var scrollListener: CircularScrollListener? = null
@@ -25,7 +25,11 @@ open class CircularListAdapter(
     }
 
     open fun createScrollListener() =
-        CircularScrollListener(itemCount, getRecyclerView()?.layoutManager as LinearLayoutManager)
+        CircularScrollListener(
+            itemCount,
+            getRecyclerView()?.layoutManager as LinearLayoutManager,
+            delegate
+        )
 
     override fun submitList(list: MutableList<BaseItem>?) {
         if (list != null && list.size > 1) {
@@ -41,21 +45,24 @@ open class CircularListAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val pos = position % itemCount
         super.onBindViewHolder(holder, pos)
     }
 
     interface Delegate : BaseListAdapter.Delegate {
-        fun listScrolled()
+        fun scrollPosition(position: Int)
     }
 
     open class CircularScrollListener(
         open var itemCount: Int,
-        private val layoutManager: LinearLayoutManager
+        private val layoutManager: LinearLayoutManager,
+        private val delegate: Delegate?
     ) : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
+            delegate?.scrollPosition(layoutManager.findFirstVisibleItemPosition())
+
             val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
             if (firstVisibleItem == itemCount - 1) {
                 recyclerView.scrollToPosition(1)
