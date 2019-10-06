@@ -22,6 +22,9 @@ class FoodCategoryCacheDataSource @Inject constructor() : FoodCategoryDataSource
                 FoodCategory(1, "https://i.imgur.com/Kut64BP.png"),
                 FoodCategory(2, "https://i.imgur.com/Q76LlXx.png"),
                 FoodCategory(3, "https://i.imgur.com/TKuUeDn.png"),
+                FoodCategory(1, "https://i.imgur.com/Kut64BP.png"),
+                FoodCategory(2, "https://i.imgur.com/Q76LlXx.png"),
+                FoodCategory(3, "https://i.imgur.com/TKuUeDn.png"),
                 FoodCategory(4, "https://i.imgur.com/mA5Rco5.png")
             )
         )

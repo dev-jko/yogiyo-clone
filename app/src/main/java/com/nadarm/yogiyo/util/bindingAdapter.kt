@@ -23,7 +23,7 @@ fun bindAdapter(
     view: RecyclerView,
     adapter: BaseListAdapter
 ) {
-    adapter.recyclerView = view
+    adapter.setRecyclerView(view)
     view.adapter = adapter
 }
 

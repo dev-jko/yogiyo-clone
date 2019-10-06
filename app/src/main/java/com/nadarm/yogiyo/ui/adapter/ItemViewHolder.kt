@@ -6,19 +6,17 @@ import com.nadarm.yogiyo.BR
 import com.nadarm.yogiyo.ui.model.BaseItem
 
 
-class ViewHolder(
+open class ItemViewHolder(
     private val binding: ViewDataBinding,
-    delegate: BaseItem.Delegate?
+    private val delegate: BaseListAdapter.Delegate?
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    init {
+    open fun bind(item: BaseItem) {
         if (delegate != null) {
             binding.setVariable(BR.delegate, delegate)
         }
-    }
-
-    fun bind(item: BaseItem) {
         binding.setVariable(BR.item, item)
         binding.executePendingBindings()
     }
+
 }

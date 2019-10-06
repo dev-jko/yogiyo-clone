@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="com.nadarm.yogiyo.ui.model.RestaurantItem" />
+            type="com.nadarm.yogiyo.ui.model.Restaurant" />
 
     </data>
 
@@ -16,37 +16,37 @@
         android:layout_margin="5dp">
 
         <ImageView
-            android:id="@+id/restaurant_image_view"
-            bindImage="@{item.item.thumbnailUrl}"
+            android:id="@+id/restaurantImageView"
+            bindImage="@{item.thumbnailUrl}"
             android:layout_width="wrap_content"
             android:layout_height="140dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/restaurant_name_text_view"
+            app:layout_constraintBottom_toTopOf="@+id/restaurantNameTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/restaurant_name_text_view"
+            android:id="@+id/restaurantNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{item.item.name}"
+            android:text="@{item.name}"
             android:textAlignment="viewStart"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/review_layout"
+            app:layout_constraintBottom_toTopOf="@+id/reviewLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/restaurant_image_view" />
+            app:layout_constraintTop_toBottomOf="@+id/restaurantImageView" />
 
         <LinearLayout
-            android:id="@+id/review_layout"
+            android:id="@+id/reviewLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/restaurant_name_text_view">
+            app:layout_constraintTop_toBottomOf="@id/restaurantNameTextView">
 
 
             <TextView
@@ -60,7 +60,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{item.item.name}"
+                android:text="@{item.name}"
                 android:textColor="@color/colorYellow"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -75,7 +75,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{Long.toString(item.item.id)}"
+                android:text="@{Long.toString(item.id)}"
                 android:textColor="@color/colorGray"
                 android:textSize="13sp" />
 

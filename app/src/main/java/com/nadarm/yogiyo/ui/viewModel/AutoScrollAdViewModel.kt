@@ -1,7 +1,8 @@
 package com.nadarm.yogiyo.ui.viewModel
 
 import com.nadarm.yogiyo.data.repository.AdRepository
-import com.nadarm.yogiyo.ui.model.AdItem
+import com.nadarm.yogiyo.ui.adapter.AutoScrollCircularListAdapter
+import com.nadarm.yogiyo.ui.model.Ad
 import com.nadarm.yogiyo.ui.model.BaseItem
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
@@ -13,8 +14,8 @@ import javax.inject.Inject
 
 interface AutoScrollAdViewModel {
 
-    interface Inputs : BaseItem.Delegate {
-        fun setAdType(type: Int)
+    interface Inputs : AutoScrollCircularListAdapter.Delegate {
+        fun setAdType(type: Ad.Type)
     }
 
     interface Outputs {
@@ -26,7 +27,7 @@ interface AutoScrollAdViewModel {
     ) : BaseViewModel(), Inputs, Outputs {
 
         private val itemClicked: PublishProcessor<BaseItem> = PublishProcessor.create()
-        private val adType: PublishProcessor<Int> = PublishProcessor.create()
+        private val adType: PublishProcessor<Ad.Type> = PublishProcessor.create()
 
         private val adItemList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
 
@@ -37,9 +38,7 @@ interface AutoScrollAdViewModel {
 
             adType.flatMapSingle { type ->
                 adRepository.getAds(type)
-                    .map { list ->
-                        list.map { ad -> AdItem(ad) as BaseItem }
-                    }.subscribeOn(Schedulers.io())
+                    .subscribeOn(Schedulers.io())
             }
                 .subscribe { adItemList.onNext(it) }
                 .addTo(compositeDisposable)
@@ -53,7 +52,7 @@ interface AutoScrollAdViewModel {
             itemClicked.onNext(item)
         }
 
-        override fun setAdType(type: Int) {
+        override fun setAdType(type: Ad.Type) {
             adType.onNext(type)
         }
     }

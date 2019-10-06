@@ -1,8 +1,8 @@
 package com.nadarm.yogiyo.ui.viewModel
 
 import com.nadarm.yogiyo.data.repository.RestaurantRepository
+import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.BaseItem
-import com.nadarm.yogiyo.ui.model.RestaurantItem
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 interface RestaurantViewModel {
 
-    interface Inputs : BaseItem.Delegate
+    interface Inputs : BaseListAdapter.Delegate
 
     interface Outputs {
         fun restaurantList(): Flowable<List<BaseItem>>
@@ -32,7 +32,6 @@ interface RestaurantViewModel {
         init {
 
             restaurantRepo.getRestaurants()
-                .map { it.map { item -> RestaurantItem(item) as BaseItem } }
                 .subscribeBy { restaurantList.onNext(it) }
                 .addTo(compositeDisposable)
 

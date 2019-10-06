@@ -15,10 +15,10 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
         //TODO restaurant 캐시 데이터
         restaurants.addAll(
             listOf(
-                Restaurant(1, "카페마마스 잠실점", true, "https://i.imgur.com/dlFdn4F.png"),
-                Restaurant(2, "카페마마스 잠실점2", true, "https://i.imgur.com/dlFdn4F.png"),
-                Restaurant(3, "카페마마스 잠실점3", true, "https://i.imgur.com/dlFdn4F.png"),
-                Restaurant(4, "카페마마스 잠실점4", true, "https://i.imgur.com/dlFdn4F.png")
+                Restaurant(1, "카페마마스 잠실점", "https://i.imgur.com/dlFdn4F.png"),
+                Restaurant(2, "카페마마스 잠실점2", "https://i.imgur.com/dlFdn4F.png"),
+                Restaurant(3, "카페마마스 잠실점3", "https://i.imgur.com/dlFdn4F.png"),
+                Restaurant(4, "카페마마스 잠실점4", "https://i.imgur.com/dlFdn4F.png")
             )
         )
     }

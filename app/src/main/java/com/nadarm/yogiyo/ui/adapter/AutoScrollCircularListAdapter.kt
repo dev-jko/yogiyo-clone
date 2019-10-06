@@ -6,31 +6,49 @@ import com.nadarm.yogiyo.ui.model.BaseItem
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class AutoScrollCircularListAdapter(
     private val interval: Long = 3000,
-    delegate: BaseItem.Delegate? = null
+    delegate: Delegate? = null
 ) : CircularListAdapter(delegate) {
 
     private var autoScrollDisposable: Disposable? = null
 
-    override fun submitList(list: MutableList<BaseItem>?) {
-        super.submitList(list)
-        if (itemCount > 1 && recyclerView != null) {
-            autoScroll(1)
-        }
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        autoScrollDisposable?.dispose()
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        autoScrollDisposable?.dispose()
-        super.onDetachedFromRecyclerView(recyclerView)
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        val layoutManager: LinearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
+        autoScroll(layoutManager.findFirstVisibleItemPosition())
+    }
+
+//    override fun setRecyclerView(recyclerView: RecyclerView) {
+//        super.setRecyclerView(recyclerView)
+//        if (itemCount > 1) {
+//            getRecyclerView()?.let {
+//                autoScroll(1)
+//            }
+//        }
+//    }
+
+    override fun submitList(list: MutableList<BaseItem>?) {
+        super.submitList(list)
+//        if (itemCount > 1) {
+//            getRecyclerView()?.let {
+//                autoScroll(1)
+//            }
+//        }
     }
 
     override fun createScrollListener(): CircularScrollListener {
         return AutoScrollListener(
             itemCount,
-            recyclerView?.layoutManager as LinearLayoutManager
+            getRecyclerView()?.layoutManager as LinearLayoutManager
         ) { state, layoutManager ->
             when (state) {
                 RecyclerView.SCROLL_STATE_DRAGGING -> autoScrollDisposable?.dispose()
@@ -41,22 +59,27 @@ class AutoScrollCircularListAdapter(
 
     private fun autoScroll(startItem: Int) {
         autoScrollDisposable?.let {
-            if (!it.isDisposed) return
+            if (!it.isDisposed) it.dispose()
         }
         autoScrollDisposable = Flowable.interval(interval, TimeUnit.MILLISECONDS)
             .map { (it.toInt() + startItem - 1) % (itemCount - 2) + 2 }
+            .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                this.recyclerView?.smoothScrollToPosition(it)
+                getRecyclerView()?.smoothScrollToPosition(it)
             }
         // TODO Error 처리 하기
     }
 
+    interface Delegate : CircularListAdapter.Delegate {
+    }
+
     class AutoScrollListener(
-        itemCount: Int,
+        override var itemCount: Int,
         private val layoutManager: LinearLayoutManager,
-        private val stateChanged: (Int, LinearLayoutManager) -> Unit
-    ) : CircularScrollListener(itemCount, layoutManager) {
+        private val stateChanged: (Int, LinearLayoutManager) -> Unit,
+        private val delegate: CircularListAdapter.Delegate
+    ) : CircularScrollListener(itemCount, layoutManager, delegate) {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             stateChanged(newState, layoutManager)
