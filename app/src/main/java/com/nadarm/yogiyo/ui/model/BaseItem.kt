@@ -5,7 +5,7 @@ import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 sealed class BaseItem {
 
     abstract class ListItem(
-        val adapter: BaseListAdapter
+        open val adapter: BaseListAdapter
     ) : BaseItem()
 
     abstract class SingleItem : BaseItem()

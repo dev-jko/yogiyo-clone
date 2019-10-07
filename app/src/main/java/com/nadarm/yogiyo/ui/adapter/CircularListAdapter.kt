@@ -10,10 +10,10 @@ open class CircularListAdapter(
 
     private var scrollListener: CircularScrollListener? = null
 
-//    override fun setRecyclerView(recyclerView: RecyclerView) {
-//        super.setRecyclerView(recyclerView)
-//        addScrollListener()
-//    }
+    override fun setRecyclerView(recyclerView: RecyclerView) {
+        super.setRecyclerView(recyclerView)
+        addScrollListener()
+    }
 
     private fun addScrollListener() {
         scrollListener?.let {
@@ -51,7 +51,7 @@ open class CircularListAdapter(
     }
 
     interface Delegate : BaseListAdapter.Delegate {
-        fun scrollPosition(position: Int)
+        fun scrollPositionChanged(position: Int)
     }
 
     open class CircularScrollListener(
@@ -61,7 +61,7 @@ open class CircularListAdapter(
     ) : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            delegate?.scrollPosition(layoutManager.findFirstVisibleItemPosition())
+            delegate?.scrollPositionChanged(layoutManager.findFirstVisibleItemPosition())
 
             val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
             if (firstVisibleItem == itemCount - 1) {

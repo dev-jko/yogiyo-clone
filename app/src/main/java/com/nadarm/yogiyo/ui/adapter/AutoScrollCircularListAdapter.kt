@@ -10,8 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class AutoScrollCircularListAdapter(
-    private val interval: Long = 3000,
-    delegate: Delegate? = null
+    private val delegate: Delegate
 ) : CircularListAdapter(delegate) {
 
     private var autoScrollDisposable: Disposable? = null
@@ -24,7 +23,7 @@ class AutoScrollCircularListAdapter(
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         val layoutManager: LinearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
-        autoScroll(layoutManager.findFirstVisibleItemPosition())
+//        autoScroll(layoutManager.findFirstVisibleItemPosition())
     }
 
 //    override fun setRecyclerView(recyclerView: RecyclerView) {
@@ -48,41 +47,43 @@ class AutoScrollCircularListAdapter(
     override fun createScrollListener(): CircularScrollListener {
         return AutoScrollListener(
             itemCount,
-            getRecyclerView()?.layoutManager as LinearLayoutManager
-        ) { state, layoutManager ->
-            when (state) {
-                RecyclerView.SCROLL_STATE_DRAGGING -> autoScrollDisposable?.dispose()
-                RecyclerView.SCROLL_STATE_IDLE -> autoScroll(layoutManager.findFirstVisibleItemPosition())
-            }
-        }
+            getRecyclerView()?.layoutManager as LinearLayoutManager,
+            delegate
+        )
+//        { state, layoutManager ->
+//            when (newState) {
+//                RecyclerView.SCROLL_STATE_DRAGGING -> autoScrollDisposable?.dispose()
+//                RecyclerView.SCROLL_STATE_IDLE -> autoScroll(layoutManager.findFirstVisibleItemPosition())
+//            }
+//        }
     }
 
-    private fun autoScroll(startItem: Int) {
-        autoScrollDisposable?.let {
-            if (!it.isDisposed) it.dispose()
-        }
-        autoScrollDisposable = Flowable.interval(interval, TimeUnit.MILLISECONDS)
-            .map { (it.toInt() + startItem - 1) % (itemCount - 2) + 2 }
-            .subscribeOn(Schedulers.computation())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                getRecyclerView()?.smoothScrollToPosition(it)
-            }
-        // TODO Error 처리 하기
-    }
+//    private fun autoScroll(startItem: Int) {
+//        autoScrollDisposable?.let {
+//            if (!it.isDisposed) it.dispose()
+//        }
+//        autoScrollDisposable = Flowable.interval(interval, TimeUnit.MILLISECONDS)
+//            .map { (it.toInt() + startItem - 1) % (itemCount - 2) + 2 }
+//            .subscribeOn(Schedulers.computation())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe {
+//                getRecyclerView()?.smoothScrollToPosition(it)
+//            }
+//        // TODO Error 처리 하기
+//    }
 
     interface Delegate : CircularListAdapter.Delegate {
+        fun scrollStateChanged(state: Int)
     }
 
     class AutoScrollListener(
-        override var itemCount: Int,
-        private val layoutManager: LinearLayoutManager,
-        private val stateChanged: (Int, LinearLayoutManager) -> Unit,
-        private val delegate: CircularListAdapter.Delegate
+        itemCount: Int,
+        layoutManager: LinearLayoutManager,
+        private val delegate: Delegate
     ) : CircularScrollListener(itemCount, layoutManager, delegate) {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
-            stateChanged(newState, layoutManager)
+            delegate.scrollStateChanged(newState)
         }
     }
 }
