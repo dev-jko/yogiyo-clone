@@ -23,7 +23,7 @@ object ViewHolderFactory {
             R.layout.item_plus_new_restaurant_list,
             R.layout.item_plus_popular_restaurant_list,
             R.layout.item_grid_list,
-            R.layout.item_horizontal_list -> ListItemViewHolder(binding, delegate)
+            R.layout.item_auto_scroll_ad_list -> ListItemViewHolder(binding, delegate)
             else -> ItemViewHolder(binding, delegate)
         }
     }
@@ -39,7 +39,7 @@ object ViewHolderFactory {
         is PlusNewRestaurantList -> R.layout.item_plus_new_restaurant_list
         is PlusPopularRestaurantList -> R.layout.item_plus_popular_restaurant_list
         is GridList -> R.layout.item_grid_list
-        is HorizontalList -> R.layout.item_horizontal_list
+        is AutoScrollAdList -> R.layout.item_auto_scroll_ad_list
         else -> R.layout.item_blank
     }
 

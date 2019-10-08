@@ -82,15 +82,15 @@ class MainFoodFragment : BaseFragment() {
 
         mainAdapter.submitList(
             listOf(
-                HorizontalList(topAdAdapter, topAdSnapHelper),
+                AutoScrollAdList(topAdAdapter, topAdSnapHelper),
                 BaseItem.BlankItem,
-                GridList(foodCategoryAdapter, null),
+                GridList(foodCategoryAdapter),
                 BaseItem.BlankItem,
-                HorizontalList(bottomAdAdapter, bottomAdSnapHelper),
+                AutoScrollAdList(bottomAdAdapter, bottomAdSnapHelper),
                 BaseItem.BlankItem,
-                PlusPopularRestaurantList(plusPopularAdapter, null),
+                PlusPopularRestaurantList(plusPopularAdapter),
                 BaseItem.BlankItem,
-                PlusNewRestaurantList(plusNewAdapter, null),
+                PlusNewRestaurantList(plusNewAdapter),
                 BaseItem.BlankItem,
                 BaseItem.BlankItem, BaseItem.BlankItem,
                 BaseItem.BlankItem, BaseItem.BlankItem,
