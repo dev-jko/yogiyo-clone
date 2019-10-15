@@ -124,7 +124,6 @@ class MainFoodFragment : BaseFragment() {
             }
             .addTo(compositeDisposable)
 
-
         foodCategoryVm.outputs.foodCategoryList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -138,6 +137,22 @@ class MainFoodFragment : BaseFragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 this.submitList(it, bottomAdAdapter)
+            }
+            .addTo(compositeDisposable)
+
+        bottomAdVm.outputs.scrollPosition()
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { position ->
+                bottomAdAdapter.getRecyclerView()?.scrollToPosition(position)
+            }
+            .addTo(compositeDisposable)
+
+        bottomAdVm.outputs.smoothScrollPosition()
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { position ->
+                bottomAdAdapter.getRecyclerView()?.smoothScrollToPosition(position)
             }
             .addTo(compositeDisposable)
 
@@ -158,7 +173,6 @@ class MainFoodFragment : BaseFragment() {
             .addTo(compositeDisposable)
 
         topAdVm.inputs.setAdType(Ad.Type.Large)
-        topAdVm.inputs.scrollStateChanged(1)
         bottomAdVm.inputs.setAdType(Ad.Type.Small)
 
 

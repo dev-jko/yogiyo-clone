@@ -86,7 +86,7 @@ interface AutoScrollAdViewModel {
                 .withLatestFrom(scrollPositionChanged) { _, position -> position + 1 }
                 .subscribe(smoothScrollPosition)
 
-
+            scrollStateChanged(RecyclerView.SCROLL_STATE_IDLE)
 
         }
 

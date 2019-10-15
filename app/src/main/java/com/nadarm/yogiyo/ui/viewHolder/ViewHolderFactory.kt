@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.nadarm.yogiyo.R
-import com.nadarm.yogiyo.ui.adapter.ItemViewHolder
 import com.nadarm.yogiyo.ui.model.*
 
 
@@ -20,8 +19,8 @@ object ViewHolderFactory {
         return when (viewType) {
             R.layout.item_plus_new_restaurant_list,
             R.layout.item_plus_popular_restaurant_list,
-            R.layout.item_grid_list -> ListItemViewHolder(binding)
-            R.layout.item_auto_scroll_ad_list -> AutoScrollListItemViewHolder(binding)
+            R.layout.item_grid_list,
+            R.layout.item_auto_scroll_ad_list -> ListItemViewHolder(binding)
             else -> ItemViewHolder(binding)
         }
     }

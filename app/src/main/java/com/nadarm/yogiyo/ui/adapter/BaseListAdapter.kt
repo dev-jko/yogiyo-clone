@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.ui.model.BaseItem
+import com.nadarm.yogiyo.ui.viewHolder.ItemViewHolder
 import com.nadarm.yogiyo.ui.viewHolder.ViewHolderFactory
 
 open class BaseListAdapter(
@@ -40,14 +41,11 @@ open class BaseListAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
-    }
-
-    override fun onViewDetachedFromWindow(holder: ItemViewHolder) {
-        super.onViewDetachedFromWindow(holder)
+        holder.bind(item, delegate)
     }
 
     interface Delegate {
         fun itemClicked(item: BaseItem)
+        fun recyclerViewSet()
     }
 }

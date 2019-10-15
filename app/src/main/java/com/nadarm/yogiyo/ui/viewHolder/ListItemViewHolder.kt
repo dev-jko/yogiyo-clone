@@ -3,7 +3,6 @@ package com.nadarm.yogiyo.ui.viewHolder
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
-import com.nadarm.yogiyo.ui.adapter.ItemViewHolder
 import com.nadarm.yogiyo.ui.model.BaseItem
 
 open class ListItemViewHolder(
