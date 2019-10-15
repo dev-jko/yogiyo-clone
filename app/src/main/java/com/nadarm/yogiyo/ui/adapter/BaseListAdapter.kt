@@ -35,7 +35,7 @@ open class BaseListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ViewHolderFactory.createViewHolder(parent, viewType, delegate)
+        return ViewHolderFactory.createViewHolder(parent, viewType)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

@@ -1,5 +1,6 @@
 package com.nadarm.yogiyo.ui.viewModel
 
+import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.data.repository.AdRepository
 import com.nadarm.yogiyo.ui.adapter.AutoScrollCircularListAdapter
 import com.nadarm.yogiyo.ui.model.Ad
@@ -9,7 +10,6 @@ import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.withLatestFrom
-import io.reactivex.rxkotlin.zipWith
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -37,7 +37,7 @@ interface AutoScrollAdViewModel {
         private val scrollPositionChanged: PublishProcessor<Int> = PublishProcessor.create()
 
         private val adItemList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
-        private val scrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.create()
+        private val scrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(1)
         private val smoothScrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.create()
 
         val inputs: Inputs = this
@@ -62,23 +62,30 @@ interface AutoScrollAdViewModel {
                 .addTo(compositeDisposable)
 
 
-            adItemList
-                .map { it.size }
-                .withLatestFrom(scrollPosition) { itemCount, position ->
-                    if (itemCount <= 1) return@withLatestFrom 0
+            val itemCount = adItemList.map { it.size }
+
+            scrollPositionChanged
+                .withLatestFrom(itemCount) { position, count -> position to count }
+                .filter { it.second > 1 }
+                .filter { it.first == it.second - 1 || it.first == 0 }
+                .map {
+                    val position = it.first
+                    val count = it.second
                     when (position) {
-                        itemCount - 1 -> 1
-                        0 -> itemCount - 1
+                        count - 1 -> 1
+                        0 -> count - 2
                         else -> position
                     }
                 }
                 .subscribe(scrollPosition)
 
+            Flowable
+                .interval(3000, TimeUnit.MILLISECONDS)
+                .withLatestFrom(scrollStateChanged) { _, state -> state }
+                .filter { state -> state == RecyclerView.SCROLL_STATE_IDLE }
+                .withLatestFrom(scrollPositionChanged) { _, position -> position + 1 }
+                .subscribe(smoothScrollPosition)
 
-//            Flowable
-//                .interval(3000, TimeUnit.MILLISECONDS)
-//                .zipWith(scrollPositionChanged) { _, position -> position + 1 }
-//                .subscribe(scrollPosition)
 
 
         }

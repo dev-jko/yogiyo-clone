@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.nadarm.yogiyo.R
-import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.adapter.ItemViewHolder
 import com.nadarm.yogiyo.ui.model.*
 
@@ -14,17 +13,16 @@ object ViewHolderFactory {
 
     fun createViewHolder(
         parent: ViewGroup,
-        viewType: Int,
-        delegate: BaseListAdapter.Delegate?
+        viewType: Int
     ): ItemViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding: ViewDataBinding = DataBindingUtil.inflate(inflater, viewType, parent, false)
         return when (viewType) {
             R.layout.item_plus_new_restaurant_list,
             R.layout.item_plus_popular_restaurant_list,
-            R.layout.item_grid_list,
-            R.layout.item_auto_scroll_ad_list -> ListItemViewHolder(binding, delegate)
-            else -> ItemViewHolder(binding, delegate)
+            R.layout.item_grid_list -> ListItemViewHolder(binding)
+            R.layout.item_auto_scroll_ad_list -> AutoScrollListItemViewHolder(binding)
+            else -> ItemViewHolder(binding)
         }
     }
 

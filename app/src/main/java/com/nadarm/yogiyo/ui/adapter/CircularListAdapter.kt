@@ -39,7 +39,7 @@ open class CircularListAdapter(
     ) : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            delegate?.scrollPositionChanged(layoutManager.findFirstVisibleItemPosition())
+            delegate?.scrollPositionChanged(layoutManager.findFirstCompletelyVisibleItemPosition())
         }
     }
 }

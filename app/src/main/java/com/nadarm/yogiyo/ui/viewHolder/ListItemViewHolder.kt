@@ -6,18 +6,17 @@ import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.adapter.ItemViewHolder
 import com.nadarm.yogiyo.ui.model.BaseItem
 
-class ListItemViewHolder(
-    binding: ViewDataBinding,
-    delegate: BaseListAdapter.Delegate?
-) : ItemViewHolder(binding, delegate) {
+open class ListItemViewHolder(
+    binding: ViewDataBinding
+) : ItemViewHolder(binding) {
 
-    private val recyclerView: RecyclerView =
+    protected val recyclerView: RecyclerView =
         binding.root.findViewWithTag<RecyclerView>("recyclerView")
 
-    override fun bind(item: BaseItem) {
+    override fun bind(item: BaseItem, delegate: BaseListAdapter.Delegate?) {
         if (item is BaseItem.ListItem) {
             item.adapter.setRecyclerView(recyclerView)
         }
-        super.bind(item)
+        super.bind(item, delegate)
     }
 }
