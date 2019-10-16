@@ -108,6 +108,14 @@ class MainFoodFragment : BaseFragment() {
             }
             .addTo(compositeDisposable)
 
+        topAdVm.outputs.scrollCoord()
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                topAdAdapter.getRecyclerView()?.scrollTo(it.first, it.second)
+            }
+            .addTo(compositeDisposable)
+
         topAdVm.outputs.scrollPosition()
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())

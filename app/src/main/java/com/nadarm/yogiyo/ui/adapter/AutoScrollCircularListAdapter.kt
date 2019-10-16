@@ -7,18 +7,10 @@ class AutoScrollCircularListAdapter(
     private val delegate: Delegate
 ) : BaseListAdapter(delegate) {
 
-    override fun setRecyclerView(recyclerView: RecyclerView) {
-        super.setRecyclerView(recyclerView)
-        addScrollListener()
-    }
-
-    private fun addScrollListener() {
-        val listener = AutoScrollListener(
-            getRecyclerView()?.layoutManager as LinearLayoutManager,
-            delegate
-        )
-        getRecyclerView()?.addOnScrollListener(listener)
-    }
+    override fun createScrollListener(): RecyclerView.OnScrollListener = AutoScrollListener(
+        getRecyclerView()?.layoutManager as LinearLayoutManager,
+        delegate
+    )
 
     interface Delegate : BaseListAdapter.Delegate {
         fun scrollPositionChanged(position: Int)
@@ -28,7 +20,7 @@ class AutoScrollCircularListAdapter(
     class AutoScrollListener(
         private val layoutManager: LinearLayoutManager,
         private val delegate: Delegate
-    ) : RecyclerView.OnScrollListener() {
+    ) : BaseListAdapter.BaseScrollListener(delegate) {
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)

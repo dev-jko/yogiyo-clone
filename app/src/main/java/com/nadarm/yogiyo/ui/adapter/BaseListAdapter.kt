@@ -9,7 +9,7 @@ import com.nadarm.yogiyo.ui.viewHolder.ItemViewHolder
 import com.nadarm.yogiyo.ui.viewHolder.ViewHolderFactory
 
 open class BaseListAdapter(
-    private val delegate: Delegate? = null
+    private val delegate: Delegate
 ) : ListAdapter<BaseItem, ItemViewHolder>(
 
     object : DiffUtil.ItemCallback<BaseItem>() {
@@ -27,8 +27,18 @@ open class BaseListAdapter(
 
     fun getRecyclerView(): RecyclerView? = recyclerView
 
-    open fun setRecyclerView(recyclerView: RecyclerView) {
+    fun setRecyclerView(recyclerView: RecyclerView) {
         this.recyclerView = recyclerView
+        addScrollListener()
+    }
+
+    private fun addScrollListener() {
+        val listener: RecyclerView.OnScrollListener = createScrollListener()
+        getRecyclerView()?.addOnScrollListener(listener)
+    }
+
+    protected open fun createScrollListener(): RecyclerView.OnScrollListener {
+        return BaseScrollListener(delegate)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -46,6 +56,19 @@ open class BaseListAdapter(
 
     interface Delegate {
         fun itemClicked(item: BaseItem)
-        fun recyclerViewSet()
+        fun scrollChanged(delta: Pair<Int, Int>)
     }
+
+    open class BaseScrollListener(
+        private val delegate: Delegate
+    ) : RecyclerView.OnScrollListener() {
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            delegate.scrollChanged(dx to dy)
+        }
+
+
+    }
+
 }

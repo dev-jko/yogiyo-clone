@@ -10,10 +10,8 @@ open class ItemViewHolder(
     private val binding: ViewDataBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    open fun bind(item: BaseItem, delegate: BaseListAdapter.Delegate?) {
-        if (delegate != null) {
-            binding.setVariable(BR.delegate, delegate)
-        }
+    open fun bind(item: BaseItem, delegate: BaseListAdapter.Delegate) {
+        binding.setVariable(BR.delegate, delegate)
         binding.setVariable(BR.item, item)
         binding.executePendingBindings()
     }

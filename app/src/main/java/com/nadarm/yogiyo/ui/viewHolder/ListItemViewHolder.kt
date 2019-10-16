@@ -12,7 +12,7 @@ open class ListItemViewHolder(
     protected val recyclerView: RecyclerView =
         binding.root.findViewWithTag<RecyclerView>("recyclerView")
 
-    override fun bind(item: BaseItem, delegate: BaseListAdapter.Delegate?) {
+    override fun bind(item: BaseItem, delegate: BaseListAdapter.Delegate) {
         if (item is BaseItem.ListItem) {
             item.adapter.setRecyclerView(recyclerView)
         }
