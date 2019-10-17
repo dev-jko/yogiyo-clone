@@ -2,7 +2,8 @@ package com.nadarm.yogiyo.ui.viewModel
 
 import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.data.repository.AdRepository
-import com.nadarm.yogiyo.ui.adapter.AutoScrollCircularListAdapter
+import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
+import com.nadarm.yogiyo.ui.listener.ScrollStateListener
 import com.nadarm.yogiyo.ui.model.Ad
 import com.nadarm.yogiyo.ui.model.BaseItem
 import io.reactivex.Flowable
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 interface AutoScrollAdViewModel {
 
-    interface Inputs : AutoScrollCircularListAdapter.Delegate {
+    interface Inputs : BaseListAdapter.Delegate, ScrollStateListener.Delegate {
         fun setAdType(type: Ad.Type)
     }
 
@@ -25,24 +26,25 @@ interface AutoScrollAdViewModel {
         fun adItemList(): Flowable<List<BaseItem>>
         fun smoothScrollPosition(): Flowable<Int>
         fun scrollPosition(): Flowable<Int>
-        fun scrollCoord(): Flowable<Pair<Int, Int>>
     }
 
     class ViewModelImpl @Inject constructor(
         private val adRepository: AdRepository
     ) : BaseViewModel(), Inputs, Outputs {
 
+        init {
+            println("auto scroll ad view model ${hashCode()}")
+        }
+
         private val itemClicked: PublishProcessor<BaseItem> = PublishProcessor.create()
         private val adType: PublishProcessor<Ad.Type> = PublishProcessor.create()
-        private val scrollChanged: PublishProcessor<Pair<Int, Int>> = PublishProcessor.create()
         private val scrollStateChanged: PublishProcessor<Int> = PublishProcessor.create()
         private val scrollPositionChanged: PublishProcessor<Int> = PublishProcessor.create()
+        private val listenerAdded: PublishProcessor<Unit> = PublishProcessor.create()
 
         private val adItemList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
         private val scrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(1)
         private val smoothScrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.create()
-        private val scrollCoord: BehaviorProcessor<Pair<Int, Int>> =
-            BehaviorProcessor.createDefault(0 to 0)
 
         val inputs: Inputs = this
         val outputs: Outputs = this
@@ -68,9 +70,9 @@ interface AutoScrollAdViewModel {
 
             val itemCount = adItemList.map { it.size }
 
-            scrollChanged
-                .scan { t1, t2 -> t1.first + t2.first to t1.second + t2.second }
-                .subscribe(scrollCoord)
+            listenerAdded
+                .withLatestFrom(scrollPositionChanged) { _, position -> position }
+                .subscribe(scrollPosition)
 
             scrollPositionChanged
                 .withLatestFrom(itemCount) { position, count -> position to count }
@@ -101,7 +103,6 @@ interface AutoScrollAdViewModel {
         override fun adItemList(): Flowable<List<BaseItem>> = adItemList
         override fun scrollPosition(): Flowable<Int> = scrollPosition
         override fun smoothScrollPosition(): Flowable<Int> = smoothScrollPosition
-        override fun scrollCoord(): Flowable<Pair<Int, Int>> = scrollCoord
 
         override fun itemClicked(item: BaseItem) {
             itemClicked.onNext(item)
@@ -119,8 +120,8 @@ interface AutoScrollAdViewModel {
             scrollPositionChanged.onNext(position)
         }
 
-        override fun scrollChanged(delta: Pair<Int, Int>) {
-            scrollChanged.onNext(delta)
+        override fun listenerAdded() {
+            listenerAdded.onNext(Unit)
         }
     }
 

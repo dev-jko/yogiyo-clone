@@ -23,6 +23,7 @@
             android:orientation="horizontal"
             android:tag="recyclerView"
             app:bindAdapter="@{item.adapter}"
+            app:bindScrollListener="@{item.scrollListener}"
             app:bindSnapHelper="@{item.snapHelper}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 

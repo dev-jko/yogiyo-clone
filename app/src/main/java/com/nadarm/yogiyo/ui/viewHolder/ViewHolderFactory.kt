@@ -16,13 +16,15 @@ object ViewHolderFactory {
     ): ItemViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding: ViewDataBinding = DataBindingUtil.inflate(inflater, viewType, parent, false)
-        return when (viewType) {
-            R.layout.item_plus_new_restaurant_list,
-            R.layout.item_plus_popular_restaurant_list,
-            R.layout.item_grid_list,
-            R.layout.item_auto_scroll_ad_list -> ListItemViewHolder(binding)
-            else -> ItemViewHolder(binding)
-        }
+
+        return ItemViewHolder(binding)
+//        return when (viewType) {
+//            R.layout.item_plus_new_restaurant_list,
+//            R.layout.item_plus_popular_restaurant_list,
+//            R.layout.item_grid_list,
+//            R.layout.item_auto_scroll_ad_list -> ListItemViewHolder(binding)
+//            else -> ItemViewHolder(binding)
+//    }
     }
 
     fun getItemViewType(item: BaseItem): Int = when (item) {

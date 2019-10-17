@@ -8,8 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.databinding.FragmentMainFoodBinding
-import com.nadarm.yogiyo.ui.adapter.AutoScrollCircularListAdapter
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
+import com.nadarm.yogiyo.ui.listener.BaseScrollListener
+import com.nadarm.yogiyo.ui.listener.ScrollStateListener
 import com.nadarm.yogiyo.ui.model.*
 import com.nadarm.yogiyo.ui.viewModel.AutoScrollAdViewModel
 import com.nadarm.yogiyo.ui.viewModel.FoodCategoryViewModel
@@ -18,7 +19,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-
 
 class MainFoodFragment : BaseFragment() {
 
@@ -45,14 +45,20 @@ class MainFoodFragment : BaseFragment() {
     lateinit var plusNewVm: RestaurantViewModel.ViewModelImpl
 
     private val mainAdapter: BaseListAdapter = BaseListAdapter()
-    private val topAdAdapter: AutoScrollCircularListAdapter by lazy {
-        AutoScrollCircularListAdapter(delegate = topAdVm)
+    private val topAdAdapter: BaseListAdapter by lazy {
+        BaseListAdapter(delegate = topAdVm)
+    }
+    private val topAdScrollListener: BaseScrollListener by lazy {
+        ScrollStateListener(topAdVm)
     }
     private val foodCategoryAdapter: BaseListAdapter by lazy {
         BaseListAdapter(delegate = foodCategoryVm)
     }
-    private val bottomAdAdapter: AutoScrollCircularListAdapter by lazy {
-        AutoScrollCircularListAdapter(delegate = bottomAdVm)
+    private val bottomAdAdapter: BaseListAdapter by lazy {
+        BaseListAdapter(delegate = bottomAdVm)
+    }
+    private val bottomAdScrollListener: BaseScrollListener by lazy {
+        ScrollStateListener(bottomAdVm)
     }
     private val plusPopularAdapter: BaseListAdapter by lazy {
         BaseListAdapter(delegate = plusPopularVm)
@@ -82,16 +88,22 @@ class MainFoodFragment : BaseFragment() {
 
         mainAdapter.submitList(
             listOf(
-                AutoScrollAdList(topAdAdapter, topAdSnapHelper),
+                AutoScrollAdList(topAdAdapter, topAdSnapHelper, topAdScrollListener),
                 BaseItem.BlankItem,
                 GridList(foodCategoryAdapter),
                 BaseItem.BlankItem,
-                AutoScrollAdList(bottomAdAdapter, bottomAdSnapHelper),
+//                AutoScrollAdList(bottomAdAdapter, bottomAdSnapHelper, bottomAdScrollListener),
                 BaseItem.BlankItem,
                 PlusPopularRestaurantList(plusPopularAdapter),
                 BaseItem.BlankItem,
                 PlusNewRestaurantList(plusNewAdapter),
                 BaseItem.BlankItem,
+                BaseItem.BlankItem, BaseItem.BlankItem,
+                BaseItem.BlankItem, BaseItem.BlankItem,
+                BaseItem.BlankItem, BaseItem.BlankItem,
+                BaseItem.BlankItem, BaseItem.BlankItem,
+                BaseItem.BlankItem, BaseItem.BlankItem,
+                BaseItem.BlankItem, BaseItem.BlankItem,
                 BaseItem.BlankItem, BaseItem.BlankItem,
                 BaseItem.BlankItem, BaseItem.BlankItem,
                 BaseItem.BlankItem, BaseItem.BlankItem,
@@ -105,14 +117,6 @@ class MainFoodFragment : BaseFragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 this.submitList(it, topAdAdapter)
-            }
-            .addTo(compositeDisposable)
-
-        topAdVm.outputs.scrollCoord()
-            .subscribeOn(Schedulers.computation())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                topAdAdapter.getRecyclerView()?.scrollTo(it.first, it.second)
             }
             .addTo(compositeDisposable)
 

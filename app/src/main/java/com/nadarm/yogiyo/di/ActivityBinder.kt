@@ -11,6 +11,7 @@ abstract class ActivityBinder {
     @ContributesAndroidInjector
     abstract fun bindSplashActivity(): SplashActivity
 
+    @ActivityScope
     @ContributesAndroidInjector
     abstract fun bindMainActivity(): MainActivity
 

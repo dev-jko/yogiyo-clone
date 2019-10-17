@@ -7,6 +7,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class FragmentBinder {
 
+    @ActivityScope
     @ContributesAndroidInjector
     abstract fun bindMainFoodFragment(): MainFoodFragment
 }
