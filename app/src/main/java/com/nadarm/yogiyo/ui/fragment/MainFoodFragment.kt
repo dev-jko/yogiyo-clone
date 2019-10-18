@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.databinding.FragmentMainFoodBinding
+import com.nadarm.yogiyo.di.ActivityScope
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.listener.BaseScrollListener
 import com.nadarm.yogiyo.ui.listener.ScrollStateListener
@@ -19,30 +21,29 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class MainFoodFragment : BaseFragment() {
+class MainFoodFragment @Inject constructor(
+    private val provider: ViewModelProvider
+) : BaseFragment() {
 
     private lateinit var binding: FragmentMainFoodBinding
 
-//    @Inject
-//    lateinit var mainAdapter: RecyclerView.Adapter<ItemViewHolder>
-//
-//    @Inject
-//    lateinit var topAdAdapter: ListAdapter<BaseItem, ItemViewHolder>
-//
-//    @Inject
-//    lateinit var foodCategoryAdapter: ListAdapter<BaseItem, ItemViewHolder>
-
-    @Inject
-    lateinit var topAdVm: AutoScrollAdViewModel.ViewModelImpl
-    @Inject
-    lateinit var foodCategoryVm: FoodCategoryViewModel.ViewModelImpl
-    @Inject
-    lateinit var bottomAdVm: AutoScrollAdViewModel.ViewModelImpl
-    @Inject
-    lateinit var plusPopularVm: RestaurantViewModel.ViewModelImpl
-    @Inject
-    lateinit var plusNewVm: RestaurantViewModel.ViewModelImpl
+    private val topAdVm: AutoScrollAdViewModel.ViewModelImpl by lazy {
+        provider.get("topAdVm", AutoScrollAdViewModel.ViewModelImpl::class.java)
+    }
+    private val foodCategoryVm: FoodCategoryViewModel.ViewModelImpl by lazy {
+        provider.get(FoodCategoryViewModel.ViewModelImpl::class.java)
+    }
+    private val bottomAdVm: AutoScrollAdViewModel.ViewModelImpl by lazy {
+        provider.get("bottomAdVm", AutoScrollAdViewModel.ViewModelImpl::class.java)
+    }
+    private val plusPopularVm: RestaurantViewModel.ViewModelImpl by lazy {
+        provider.get("plusPopularVm", RestaurantViewModel.ViewModelImpl::class.java)
+    }
+    private val plusNewVm: RestaurantViewModel.ViewModelImpl by lazy {
+        provider.get("plusNewVm", RestaurantViewModel.ViewModelImpl::class.java)
+    }
 
     private val mainAdapter: BaseListAdapter = BaseListAdapter()
     private val topAdAdapter: BaseListAdapter by lazy {
@@ -67,7 +68,6 @@ class MainFoodFragment : BaseFragment() {
         BaseListAdapter(delegate = plusNewVm)
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,7 +80,6 @@ class MainFoodFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
         val topAdSnapHelper = PagerSnapHelper()
         val bottomAdSnapHelper = PagerSnapHelper()
 
@@ -92,7 +91,7 @@ class MainFoodFragment : BaseFragment() {
                 BaseItem.BlankItem,
                 GridList(foodCategoryAdapter),
                 BaseItem.BlankItem,
-//                AutoScrollAdList(bottomAdAdapter, bottomAdSnapHelper, bottomAdScrollListener),
+                AutoScrollAdList(bottomAdAdapter, bottomAdSnapHelper, bottomAdScrollListener),
                 BaseItem.BlankItem,
                 PlusPopularRestaurantList(plusPopularAdapter),
                 BaseItem.BlankItem,
@@ -121,6 +120,7 @@ class MainFoodFragment : BaseFragment() {
             .addTo(compositeDisposable)
 
         topAdVm.outputs.scrollPosition()
+//            .doOnNext { println("top ad vm scroll position = $it") }
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { position ->

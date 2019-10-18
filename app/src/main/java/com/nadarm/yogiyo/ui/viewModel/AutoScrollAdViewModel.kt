@@ -32,10 +32,6 @@ interface AutoScrollAdViewModel {
         private val adRepository: AdRepository
     ) : BaseViewModel(), Inputs, Outputs {
 
-        init {
-            println("auto scroll ad view model ${hashCode()}")
-        }
-
         private val itemClicked: PublishProcessor<BaseItem> = PublishProcessor.create()
         private val adType: PublishProcessor<Ad.Type> = PublishProcessor.create()
         private val scrollStateChanged: PublishProcessor<Int> = PublishProcessor.create()
@@ -72,6 +68,8 @@ interface AutoScrollAdViewModel {
 
             listenerAdded
                 .withLatestFrom(scrollPositionChanged) { _, position -> position }
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .doOnNext { println("listener added = $it") }
                 .subscribe(scrollPosition)
 
             scrollPositionChanged
@@ -90,7 +88,7 @@ interface AutoScrollAdViewModel {
                 .subscribe(scrollPosition)
 
             Flowable
-                .interval(3000, TimeUnit.MILLISECONDS)
+                .interval(3000, 3000, TimeUnit.MILLISECONDS)
                 .withLatestFrom(scrollStateChanged) { _, state -> state }
                 .filter { state -> state == RecyclerView.SCROLL_STATE_IDLE }
                 .withLatestFrom(scrollPositionChanged) { _, position -> position + 1 }

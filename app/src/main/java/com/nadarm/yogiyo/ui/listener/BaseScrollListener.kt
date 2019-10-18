@@ -22,7 +22,9 @@ open class BaseScrollListener(
                 is GridLayoutManager -> it.findFirstCompletelyVisibleItemPosition()
                 else -> 0
             }
-            delegate.scrollPositionChanged(position)
+            if (position >= 0) {
+                delegate.scrollPositionChanged(position)
+            }
         }
     }
 
