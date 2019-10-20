@@ -44,14 +44,8 @@ open class BaseListAdapter(
         holder.bind(item, delegate)
     }
 
-    override fun onViewDetachedFromWindow(holder: ItemViewHolder) {
-        super.onViewDetachedFromWindow(holder)
-    }
-
     interface Delegate {
         fun itemClicked(item: BaseItem)
-        fun bind()
-        fun unbind()
     }
 
 

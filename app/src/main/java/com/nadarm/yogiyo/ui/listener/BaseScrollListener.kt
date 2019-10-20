@@ -10,10 +10,6 @@ open class BaseScrollListener(
 
     var layoutManager: RecyclerView.LayoutManager? = null
 
-    fun init() {
-        delegate.listenerAdded()
-    }
-
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
         layoutManager?.let {
@@ -30,6 +26,6 @@ open class BaseScrollListener(
 
     interface Delegate {
         fun scrollPositionChanged(position: Int)
-        fun listenerAdded()
+        fun lastScrollPosition(position: Int)
     }
 }

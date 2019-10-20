@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.databinding.FragmentMainFoodBinding
@@ -21,8 +22,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import javax.inject.Singleton
 
+@ActivityScope
 class MainFoodFragment @Inject constructor(
     private val provider: ViewModelProvider
 ) : BaseFragment() {
@@ -84,6 +85,7 @@ class MainFoodFragment @Inject constructor(
         val bottomAdSnapHelper = PagerSnapHelper()
 
         binding.mainAdapter = mainAdapter
+        binding.mainRecyclerView.setItemViewCacheSize(10)
 
         mainAdapter.submitList(
             listOf(
@@ -120,7 +122,7 @@ class MainFoodFragment @Inject constructor(
             .addTo(compositeDisposable)
 
         topAdVm.outputs.scrollPosition()
-//            .doOnNext { println("top ad vm scroll position = $it") }
+            .doOnNext { println("fragment = $it") }
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { position ->
@@ -187,7 +189,15 @@ class MainFoodFragment @Inject constructor(
         topAdVm.inputs.setAdType(Ad.Type.Large)
         bottomAdVm.inputs.setAdType(Ad.Type.Small)
 
+    }
 
+    override fun onPause() {
+        topAdAdapter.getRecyclerView()?.layoutManager?.let {
+            if (it is LinearLayoutManager) {
+                topAdVm.inputs.lastScrollPosition(it.findFirstCompletelyVisibleItemPosition())
+            }
+        }
+        super.onPause()
     }
 
     private fun submitList(newList: List<BaseItem>, adapter: BaseListAdapter) {

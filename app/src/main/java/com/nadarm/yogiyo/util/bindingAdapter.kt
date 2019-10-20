@@ -19,25 +19,42 @@ fun bindImage(view: ImageView, imageUrl: String) {
     Glide.with(view.context).load(imageUrl).into(view)
 }
 
-@BindingAdapter("bindAdapter")
+@BindingAdapter("bindAdapter", "bindScrollListener", "bindSnapHelper", requireAll = false)
 fun bindAdapter(
     view: RecyclerView,
-    adapter: BaseListAdapter
+    adapter: BaseListAdapter,
+    scrollListener: BaseScrollListener?,
+    snapHelper: SnapHelper?
 ) {
-    adapter.setRecyclerView(view)
-    view.adapter = adapter
-}
+    if (view.adapter == null) {
+        view.adapter = adapter
+        adapter.setRecyclerView(view)
 
-@BindingAdapter("bindScrollListener")
-fun bindScrollListener(view: RecyclerView, scrollListener: BaseScrollListener?) {
-    if (scrollListener != null) {
-        view.addOnScrollListener(scrollListener)
-        scrollListener.layoutManager = view.layoutManager
-        scrollListener.init()
+        scrollListener?.let {
+            view.clearOnScrollListeners()
+            view.addOnScrollListener(it)
+            it.layoutManager = view.layoutManager
+        }
+
+        if (view.onFlingListener == null) {
+            snapHelper?.attachToRecyclerView(view)
+        }
     }
 }
 
-@BindingAdapter("bindSnapHelper")
-fun bindSnapHelper(view: RecyclerView, snapHelper: SnapHelper?) {
-    snapHelper?.attachToRecyclerView(view)
-}
+//@BindingAdapter("bindScrollListener")
+//fun bindScrollListener(view: RecyclerView, scrollListener: BaseScrollListener?) {
+//    scrollListener?.let {
+//        view.clearOnScrollListeners()
+//        view.addOnScrollListener(it)
+//        it.layoutManager = view.layoutManager
+//    }
+//}
+//
+//@BindingAdapter("bindSnapHelper")
+//fun bindSnapHelper(view: RecyclerView, snapHelper: SnapHelper?) {
+//    if (view.onFlingListener == null) {
+//        snapHelper?.attachToRecyclerView(view)
+//    }
+//}
+

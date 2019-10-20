@@ -36,7 +36,7 @@ interface AutoScrollAdViewModel {
         private val adType: PublishProcessor<Ad.Type> = PublishProcessor.create()
         private val scrollStateChanged: PublishProcessor<Int> = PublishProcessor.create()
         private val scrollPositionChanged: PublishProcessor<Int> = PublishProcessor.create()
-        private val listenerAdded: PublishProcessor<Unit> = PublishProcessor.create()
+        private val lastScrollPosition: PublishProcessor<Int> = PublishProcessor.create()
 
         private val adItemList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
         private val scrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(1)
@@ -63,16 +63,10 @@ interface AutoScrollAdViewModel {
                 .subscribe { adItemList.onNext(it) }
                 .addTo(compositeDisposable)
 
-
             val itemCount = adItemList.map { it.size }
 
-            listenerAdded
-                .withLatestFrom(scrollPositionChanged) { _, position -> position }
-                .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                .doOnNext { println("listener added = $it") }
-                .subscribe(scrollPosition)
-
             scrollPositionChanged
+                .mergeWith(lastScrollPosition)
                 .withLatestFrom(itemCount) { position, count -> position to count }
                 .filter { it.second > 1 }
                 .filter { it.first == it.second - 1 || it.first == 0 }
@@ -88,10 +82,11 @@ interface AutoScrollAdViewModel {
                 .subscribe(scrollPosition)
 
             Flowable
-                .interval(3000, 3000, TimeUnit.MILLISECONDS)
+                .interval(4000, 4000, TimeUnit.MILLISECONDS)
                 .withLatestFrom(scrollStateChanged) { _, state -> state }
                 .filter { state -> state == RecyclerView.SCROLL_STATE_IDLE }
                 .withLatestFrom(scrollPositionChanged) { _, position -> position + 1 }
+                .throttleLatest(4000, TimeUnit.MILLISECONDS)
                 .subscribe(smoothScrollPosition)
 
             scrollStateChanged(RecyclerView.SCROLL_STATE_IDLE)
@@ -118,8 +113,8 @@ interface AutoScrollAdViewModel {
             scrollPositionChanged.onNext(position)
         }
 
-        override fun listenerAdded() {
-            listenerAdded.onNext(Unit)
+        override fun lastScrollPosition(position: Int) {
+            lastScrollPosition.onNext(position)
         }
     }
 

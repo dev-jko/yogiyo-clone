@@ -1,5 +1,6 @@
 package com.nadarm.yogiyo.ui.viewModel
 
+import android.os.Parcelable
 import com.nadarm.yogiyo.data.repository.RestaurantRepository
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.BaseItem
@@ -42,6 +43,7 @@ interface RestaurantViewModel {
         override fun itemClicked(item: BaseItem) {
             itemClicked.onNext(item)
         }
+
     }
 
 }
