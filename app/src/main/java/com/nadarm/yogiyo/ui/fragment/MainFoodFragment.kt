@@ -1,16 +1,20 @@
 package com.nadarm.yogiyo.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.databinding.FragmentMainFoodBinding
 import com.nadarm.yogiyo.di.ActivityScope
+import com.nadarm.yogiyo.ui.activity.AdActivity
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.listener.BaseScrollListener
 import com.nadarm.yogiyo.ui.listener.ScrollStateListener
@@ -18,9 +22,11 @@ import com.nadarm.yogiyo.ui.model.*
 import com.nadarm.yogiyo.ui.viewModel.AutoScrollAdViewModel
 import com.nadarm.yogiyo.ui.viewModel.FoodCategoryViewModel
 import com.nadarm.yogiyo.ui.viewModel.RestaurantViewModel
+import com.nadarm.yogiyo.util.subscribeMainThread
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @ActivityScope
@@ -98,17 +104,6 @@ class MainFoodFragment @Inject constructor(
                 PlusPopularRestaurantList(plusPopularAdapter),
                 BaseItem.BlankItem,
                 PlusNewRestaurantList(plusNewAdapter),
-                BaseItem.BlankItem,
-                BaseItem.BlankItem, BaseItem.BlankItem,
-                BaseItem.BlankItem, BaseItem.BlankItem,
-                BaseItem.BlankItem, BaseItem.BlankItem,
-                BaseItem.BlankItem, BaseItem.BlankItem,
-                BaseItem.BlankItem, BaseItem.BlankItem,
-                BaseItem.BlankItem, BaseItem.BlankItem,
-                BaseItem.BlankItem, BaseItem.BlankItem,
-                BaseItem.BlankItem, BaseItem.BlankItem,
-                BaseItem.BlankItem, BaseItem.BlankItem,
-                BaseItem.BlankItem, BaseItem.BlankItem,
                 BaseItem.BlankItem
             )
         )
@@ -122,7 +117,6 @@ class MainFoodFragment @Inject constructor(
             .addTo(compositeDisposable)
 
         topAdVm.outputs.scrollPosition()
-            .doOnNext { println("fragment = $it") }
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { position ->
@@ -178,29 +172,65 @@ class MainFoodFragment @Inject constructor(
             }
             .addTo(compositeDisposable)
 
-        plusNewVm.outputs.restaurantList()
-            .subscribeOn(Schedulers.io())
+        plusPopularVm.outputs.scrollPosition()
+            .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                this.submitList(it, plusNewAdapter)
+            .subscribe { position ->
+                plusPopularAdapter.getRecyclerView()?.scrollToPosition(position)
             }
             .addTo(compositeDisposable)
 
+        plusNewVm.outputs.restaurantList()
+            .subscribeMainThread(Schedulers.io(), compositeDisposable) {
+                this.submitList(it, plusNewAdapter)
+            }
+
+        plusNewVm.outputs.scrollPosition()
+            .subscribeMainThread(Schedulers.computation(), compositeDisposable) { position ->
+                plusNewAdapter.getRecyclerView()?.scrollToPosition(position)
+            }
+
+        topAdVm.outputs.startAdActivity()
+            .mergeWith(bottomAdVm.outputs.startAdActivity())
+            .throttleFirst(1000, TimeUnit.MILLISECONDS)
+            .subscribeMainThread(
+                Schedulers.computation(),
+                compositeDisposable,
+                this::startAdActivity
+            )
+
+        foodCategoryVm.outputs.navigateCategoryTab()
+            .throttleFirst(1000, TimeUnit.MILLISECONDS)
+            .subscribeMainThread(Schedulers.computation(), compositeDisposable, this::navigate)
+
         topAdVm.inputs.setAdType(Ad.Type.Large)
+        topAdVm.inputs.scrollStateChanged(RecyclerView.SCROLL_STATE_IDLE)
         bottomAdVm.inputs.setAdType(Ad.Type.Small)
+        bottomAdVm.inputs.scrollStateChanged(RecyclerView.SCROLL_STATE_IDLE)
 
     }
 
     override fun onPause() {
-        topAdAdapter.getRecyclerView()?.layoutManager?.let {
-            if (it is LinearLayoutManager) {
-                topAdVm.inputs.lastScrollPosition(it.findFirstCompletelyVisibleItemPosition())
-            }
-        }
+        topAdAdapter.lastScrollPosition()
+        bottomAdAdapter.lastScrollPosition()
+        plusPopularAdapter.lastScrollPosition()
+        plusNewAdapter.lastScrollPosition()
         super.onPause()
     }
 
     private fun submitList(newList: List<BaseItem>, adapter: BaseListAdapter) {
         adapter.submitList(newList)
+    }
+
+    private fun navigate(category: FoodCategory) {
+        val arg = bundleOf("category" to category.category)
+        findNavController().navigate(R.id.action_item_main_home_to_foodTabFragment, arg)
+    }
+
+    private fun startAdActivity(ad: Ad) {
+        val intent = Intent(context, AdActivity::class.java)
+        intent.putExtra("adId", ad.id)
+        intent.putExtra("pageUrl", ad.pageUrl)
+        startActivity(intent)
     }
 }

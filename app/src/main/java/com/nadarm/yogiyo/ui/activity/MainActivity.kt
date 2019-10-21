@@ -13,18 +13,6 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         setUpNavigation()
-
-//
-//
-//        bottom_navigation.setOnNavigationItemSelectedListener {
-//            when (it.itemId) {
-//                R.id.item_main_home -> findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_mainFoodFragment)
-//                R.id.item_main_search -> findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_mainSearchFragment)
-//                R.id.item_main_order -> findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_mainOrderListFragment)
-//                R.id.item_main_user -> findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_mainMyInfoFragment)
-//            }
-//            true
-//        }
     }
 
     private fun setUpNavigation() {

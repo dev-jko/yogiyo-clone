@@ -26,6 +26,5 @@ open class BaseScrollListener(
 
     interface Delegate {
         fun scrollPositionChanged(position: Int)
-        fun lastScrollPosition(position: Int)
     }
 }

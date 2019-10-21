@@ -26,6 +26,7 @@ interface AutoScrollAdViewModel {
         fun adItemList(): Flowable<List<BaseItem>>
         fun smoothScrollPosition(): Flowable<Int>
         fun scrollPosition(): Flowable<Int>
+        fun startAdActivity(): Flowable<Ad>
     }
 
     class ViewModelImpl @Inject constructor(
@@ -40,7 +41,8 @@ interface AutoScrollAdViewModel {
 
         private val adItemList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
         private val scrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(1)
-        private val smoothScrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.create()
+        private val smoothScrollPosition: Flowable<Int>
+        private val startAdActivity: Flowable<Ad>
 
         val inputs: Inputs = this
         val outputs: Outputs = this
@@ -66,7 +68,7 @@ interface AutoScrollAdViewModel {
             val itemCount = adItemList.map { it.size }
 
             scrollPositionChanged
-                .mergeWith(lastScrollPosition)
+                .debounce(500, TimeUnit.MILLISECONDS)
                 .withLatestFrom(itemCount) { position, count -> position to count }
                 .filter { it.second > 1 }
                 .filter { it.first == it.second - 1 || it.first == 0 }
@@ -81,21 +83,24 @@ interface AutoScrollAdViewModel {
                 }
                 .subscribe(scrollPosition)
 
-            Flowable
+            lastScrollPosition
+                .subscribe(scrollPosition)
+
+            smoothScrollPosition = Flowable
                 .interval(4000, 4000, TimeUnit.MILLISECONDS)
                 .withLatestFrom(scrollStateChanged) { _, state -> state }
                 .filter { state -> state == RecyclerView.SCROLL_STATE_IDLE }
                 .withLatestFrom(scrollPositionChanged) { _, position -> position + 1 }
-                .throttleLatest(4000, TimeUnit.MILLISECONDS)
-                .subscribe(smoothScrollPosition)
 
-            scrollStateChanged(RecyclerView.SCROLL_STATE_IDLE)
+            startAdActivity = itemClicked
+                .map { it as Ad }
 
         }
 
         override fun adItemList(): Flowable<List<BaseItem>> = adItemList
         override fun scrollPosition(): Flowable<Int> = scrollPosition
         override fun smoothScrollPosition(): Flowable<Int> = smoothScrollPosition
+        override fun startAdActivity(): Flowable<Ad> = startAdActivity
 
         override fun itemClicked(item: BaseItem) {
             itemClicked.onNext(item)

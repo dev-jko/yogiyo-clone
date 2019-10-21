@@ -1,9 +1,9 @@
 package com.nadarm.yogiyo.ui.viewModel
 
-import android.os.Parcelable
 import com.nadarm.yogiyo.data.repository.FoodCategoryRepository
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.BaseItem
+import com.nadarm.yogiyo.ui.model.FoodCategory
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
@@ -17,6 +17,7 @@ interface FoodCategoryViewModel {
 
     interface Outputs {
         fun foodCategoryList(): Flowable<List<BaseItem>>
+        fun navigateCategoryTab(): Flowable<FoodCategory>
     }
 
     class ViewModelImpl @Inject constructor(
@@ -25,8 +26,8 @@ interface FoodCategoryViewModel {
 
         private val itemClicked: PublishProcessor<BaseItem> = PublishProcessor.create()
 
-        private val foodCategoryList: BehaviorProcessor<List<BaseItem>> =
-            BehaviorProcessor.create()
+        private val foodCategoryList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
+        private val navigateCategoryTab: Flowable<FoodCategory>
 
         val inputs: Inputs = this
         val outputs: Outputs = this
@@ -36,14 +37,20 @@ interface FoodCategoryViewModel {
                 .subscribeBy { foodCategoryList.onNext(it) }
                 .addTo(compositeDisposable)
 
+            navigateCategoryTab = itemClicked
+                .map { it as FoodCategory }
         }
 
         override fun foodCategoryList(): Flowable<List<BaseItem>> = foodCategoryList
+        override fun navigateCategoryTab(): Flowable<FoodCategory> = navigateCategoryTab
 
         override fun itemClicked(item: BaseItem) {
             itemClicked.onNext(item)
         }
 
+        override fun lastScrollPosition(position: Int) {
+
+        }
     }
 
 }

@@ -1,6 +1,5 @@
 package com.nadarm.yogiyo.ui.viewModel
 
-import android.os.Parcelable
 import com.nadarm.yogiyo.data.repository.RestaurantRepository
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.BaseItem
@@ -17,6 +16,7 @@ interface RestaurantViewModel {
 
     interface Outputs {
         fun restaurantList(): Flowable<List<BaseItem>>
+        fun scrollPosition(): Flowable<Int>
     }
 
     class ViewModelImpl @Inject constructor(
@@ -24,8 +24,10 @@ interface RestaurantViewModel {
     ) : BaseViewModel(), Inputs, Outputs {
 
         private val itemClicked: PublishProcessor<BaseItem> = PublishProcessor.create()
+        private val lastScrollPosition: PublishProcessor<Int> = PublishProcessor.create()
 
         private val restaurantList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
+        private val scrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(0)
 
         val inputs: Inputs = this
         val outputs: Outputs = this
@@ -36,14 +38,21 @@ interface RestaurantViewModel {
                 .subscribeBy { restaurantList.onNext(it) }
                 .addTo(compositeDisposable)
 
+            lastScrollPosition
+                .subscribe(scrollPosition)
+
         }
 
         override fun restaurantList(): Flowable<List<BaseItem>> = restaurantList
+        override fun scrollPosition(): Flowable<Int> = scrollPosition
 
         override fun itemClicked(item: BaseItem) {
             itemClicked.onNext(item)
         }
 
+        override fun lastScrollPosition(position: Int) {
+            lastScrollPosition.onNext(position)
+        }
     }
 
 }

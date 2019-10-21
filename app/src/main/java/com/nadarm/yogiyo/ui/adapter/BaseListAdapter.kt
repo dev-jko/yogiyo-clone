@@ -2,6 +2,7 @@ package com.nadarm.yogiyo.ui.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nadarm.yogiyo.ui.model.BaseItem
@@ -44,8 +45,17 @@ open class BaseListAdapter(
         holder.bind(item, delegate)
     }
 
+    fun lastScrollPosition() {
+        getRecyclerView()?.layoutManager?.let {
+            if (it is LinearLayoutManager) {
+                delegate?.lastScrollPosition(it.findFirstCompletelyVisibleItemPosition())
+            }
+        }
+    }
+
     interface Delegate {
         fun itemClicked(item: BaseItem)
+        fun lastScrollPosition(position: Int)
     }
 
 
