@@ -23,5 +23,7 @@ class FoodTabFragment : Fragment() {
         arguments?.let {
             tab_textView.text = it["category"].toString()
         }
+
+//        tabLayout.setupWithViewPager(viewPager)
     }
 }

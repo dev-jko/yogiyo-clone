@@ -55,7 +55,7 @@ open class BaseListAdapter(
 
     interface Delegate {
         fun itemClicked(item: BaseItem)
-        fun lastScrollPosition(position: Int)
+        fun lastScrollPosition(position: Int) // TODO 인터페이스 분리 필요함
     }
 
 

@@ -22,32 +22,6 @@
         android:label="fragment_main_my_info"
         tools:layout="@layout/fragment_main_my_info" />
 
-
-    <action
-        android:id="@+id/action_global_main_food_navigation"
-        app:destination="@+id/item_main_home"
-        app:launchSingleTop="true"
-        app:popUpTo="@+id/nav_graph_main"
-        app:popUpToInclusive="true" />
-    <action
-        android:id="@+id/action_global_mainSearchFragment"
-        app:destination="@id/item_main_search"
-        app:launchSingleTop="true"
-        app:popUpTo="@+id/nav_graph_main"
-        app:popUpToInclusive="true" />
-    <action
-        android:id="@+id/action_global_mainMyInfoFragment"
-        app:destination="@id/item_main_user"
-        app:launchSingleTop="true"
-        app:popUpTo="@+id/nav_graph_main"
-        app:popUpToInclusive="true" />
-    <action
-        android:id="@+id/action_global_mainOrderListFragment"
-        app:destination="@id/item_main_order"
-        app:launchSingleTop="true"
-        app:popUpTo="@+id/nav_graph_main"
-        app:popUpToInclusive="true" />
-
     <navigation
         android:id="@+id/item_main_home"
         app:startDestination="@id/mainFoodFragment">

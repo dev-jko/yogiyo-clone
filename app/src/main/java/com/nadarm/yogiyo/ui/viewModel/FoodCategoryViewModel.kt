@@ -49,7 +49,7 @@ interface FoodCategoryViewModel {
         }
 
         override fun lastScrollPosition(position: Int) {
-
+            // TODO 인터페이스 분리 필요함
         }
     }
 
