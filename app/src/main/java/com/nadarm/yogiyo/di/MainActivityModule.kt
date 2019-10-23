@@ -11,7 +11,7 @@ abstract class MainActivityModule {
 
 //    @FragmentScope
 //    @ContributesAndroidInjector(modules = [FoodModule.FoodProviderModule::class])
-//    abstract fun bindMainFoodFragment(): MainFoodFragment
+//    abstract fun bindMainFoodFragment(): FoodHomeFragment
 
     @Binds
     @ActivityScope

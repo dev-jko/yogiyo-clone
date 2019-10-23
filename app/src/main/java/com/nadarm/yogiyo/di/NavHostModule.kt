@@ -2,6 +2,8 @@ package com.nadarm.yogiyo.di
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
+import com.nadarm.yogiyo.ui.fragment.FoodHomeFragment
+import com.nadarm.yogiyo.ui.fragment.FoodTabFragment
 import com.nadarm.yogiyo.ui.fragment.InjectingNavHostFragment
 import com.nadarm.yogiyo.ui.fragment.MainFoodFragment
 import dagger.Binds
@@ -28,6 +30,16 @@ abstract class FragmentBindingModule {
     @IntoMap
     @FragmentKey(MainFoodFragment::class)
     abstract fun bindMainFoodFragment(fragment: MainFoodFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FoodHomeFragment::class)
+    abstract fun bindFoodHomeFragment(fragment: FoodHomeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FoodTabFragment::class)
+    abstract fun bindFoodTabFragment(fragment: FoodTabFragment): Fragment
 
 }
 

@@ -8,11 +8,16 @@ import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.rxkotlin.zipWith
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 interface RestaurantViewModel {
 
-    interface Inputs : BaseListAdapter.Delegate
+    interface Inputs : BaseListAdapter.Delegate {
+        fun isPlus(value: Boolean)
+        fun category(id: Long)
+    }
 
     interface Outputs {
         fun restaurantList(): Flowable<List<BaseItem>>
@@ -25,6 +30,8 @@ interface RestaurantViewModel {
 
         private val itemClicked: PublishProcessor<BaseItem> = PublishProcessor.create()
         private val lastScrollPosition: PublishProcessor<Int> = PublishProcessor.create()
+        private val isPlus: PublishProcessor<Boolean> = PublishProcessor.create()
+        private val category: PublishProcessor<Long> = PublishProcessor.create()
 
         private val restaurantList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
         private val scrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(0)
@@ -34,7 +41,13 @@ interface RestaurantViewModel {
 
         init {
 
-            restaurantRepo.getRestaurants()
+            isPlus.zipWith(category) { isPlus, categoryId -> isPlus to categoryId }
+                .flatMapSingle {
+                    val isPlus = it.first
+                    val categoryId = it.second
+                    restaurantRepo.getRestaurants(isPlus, categoryId)
+                        .subscribeOn(Schedulers.io())
+                }
                 .subscribeBy { restaurantList.onNext(it) }
                 .addTo(compositeDisposable)
 
@@ -53,6 +66,15 @@ interface RestaurantViewModel {
         override fun lastScrollPosition(position: Int) {
             lastScrollPosition.onNext(position)
         }
+
+        override fun isPlus(value: Boolean) {
+            isPlus.onNext(value)
+        }
+
+        override fun category(id: Long) {
+            category.onNext(id)
+        }
+
     }
 
 }

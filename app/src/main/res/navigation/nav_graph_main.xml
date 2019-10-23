@@ -6,6 +6,11 @@
     app:startDestination="@id/item_main_home">
 
     <fragment
+        android:id="@+id/item_main_home"
+        android:name="com.nadarm.yogiyo.ui.fragment.MainFoodFragment"
+        android:label="fragment_food_main"
+        tools:layout="@layout/fragment_main_food" />
+    <fragment
         android:id="@+id/item_main_search"
         android:name="com.nadarm.yogiyo.ui.fragment.MainSearchFragment"
         android:label="fragment_main_search"
@@ -15,32 +20,11 @@
         android:name="com.nadarm.yogiyo.ui.fragment.MainOrderListFragment"
         android:label="fragment_main_order_list"
         tools:layout="@layout/fragment_main_order_list" />
-
     <fragment
         android:id="@+id/item_main_user"
         android:name="com.nadarm.yogiyo.ui.fragment.MainMyInfoFragment"
         android:label="fragment_main_my_info"
         tools:layout="@layout/fragment_main_my_info" />
-
-    <navigation
-        android:id="@+id/item_main_home"
-        app:startDestination="@id/mainFoodFragment">
-        <fragment
-            android:id="@+id/mainFoodFragment"
-            android:name="com.nadarm.yogiyo.ui.fragment.MainFoodFragment"
-            android:label="fragment_food_main"
-            tools:layout="@layout/fragment_main_food">
-            <action
-                android:id="@+id/action_item_main_home_to_foodTabFragment"
-                app:destination="@id/foodTabFragment" />
-        </fragment>
-
-        <fragment
-            android:id="@+id/foodTabFragment"
-            android:name="com.nadarm.yogiyo.ui.fragment.FoodTabFragment"
-            android:label="fragment_food_tab"
-            tools:layout="@layout/fragment_food_tab" />
-    </navigation>
 
 
 </navigation>

@@ -34,7 +34,7 @@ object ViewHolderFactory {
         }
         is FoodCategory -> R.layout.item_food_category
         is PlusRestaurant -> R.layout.item_plus_restaurant_thumbnail
-        is Restaurant -> R.layout.item_plus_restaurant_thumbnail // TODO 일반 음식점 레이아웃
+        is Restaurant -> R.layout.item_restaurant_thumbnail
         is PlusNewRestaurantList -> R.layout.item_plus_new_restaurant_list
         is PlusPopularRestaurantList -> R.layout.item_plus_popular_restaurant_list
         is GridList -> R.layout.item_grid_list
@@ -45,7 +45,7 @@ object ViewHolderFactory {
     fun areSame(oldItem: BaseItem, newItem: BaseItem): Boolean {
         return when (oldItem) {
             is Ad -> oldItem.id == (newItem as Ad).id
-            is FoodCategory -> oldItem.category == (newItem as FoodCategory).category
+            is FoodCategory -> oldItem.id == (newItem as FoodCategory).id
             is Restaurant -> oldItem.id == (newItem as Restaurant).id
             is BaseItem.ListItem -> oldItem.adapter == (newItem as BaseItem.ListItem).adapter
             else -> true
