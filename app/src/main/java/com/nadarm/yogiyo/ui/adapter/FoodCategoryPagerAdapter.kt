@@ -13,7 +13,6 @@ class FoodCategoryPagerAdapter(
         set(value) {
             field = value
             notifyDataSetChanged()
-            println(value)
         }
 
     override fun getItem(position: Int): Fragment = tabs[position]

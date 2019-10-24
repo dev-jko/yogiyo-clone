@@ -11,7 +11,7 @@ import com.nadarm.yogiyo.ui.listener.BaseScrollListener
 
 @BindingAdapter("bindImage")
 fun bindImage(view: ImageView, srcId: Int) {
-    Glide.with(view.context).load(srcId).into(view)
+    Glide.with(view.context).load(srcId).override(view.width, view.height).into(view)
 }
 
 @BindingAdapter("bindImage")
@@ -41,20 +41,4 @@ fun bindAdapter(
         }
     }
 }
-
-//@BindingAdapter("bindScrollListener")
-//fun bindScrollListener(view: RecyclerView, scrollListener: BaseScrollListener?) {
-//    scrollListener?.let {
-//        view.clearOnScrollListeners()
-//        view.addOnScrollListener(it)
-//        it.layoutManager = view.layoutManager
-//    }
-//}
-//
-//@BindingAdapter("bindSnapHelper")
-//fun bindSnapHelper(view: RecyclerView, snapHelper: SnapHelper?) {
-//    if (view.onFlingListener == null) {
-//        snapHelper?.attachToRecyclerView(view)
-//    }
-//}
 

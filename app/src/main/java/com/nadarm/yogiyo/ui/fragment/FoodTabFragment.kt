@@ -8,17 +8,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.databinding.FragmentFoodTabBinding
-import com.nadarm.yogiyo.di.ActivityScope
 import com.nadarm.yogiyo.ui.adapter.FoodCategoryPagerAdapter
 import com.nadarm.yogiyo.ui.model.FoodCategory
 import com.nadarm.yogiyo.ui.viewModel.FoodCategoryViewModel
 import com.nadarm.yogiyo.ui.viewModel.RestaurantViewModel
+import com.nadarm.yogiyo.ui.viewModel.TopScrollVIewModel
 import com.nadarm.yogiyo.util.subscribeMainThread
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_food_tab.*
 import javax.inject.Inject
 
-@ActivityScope
+
 class FoodTabFragment @Inject constructor(
     private val provider: ViewModelProvider
 ) : BaseFragment() {
@@ -42,16 +42,19 @@ class FoodTabFragment @Inject constructor(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val manager = fragmentManager!!
+        val manager = childFragmentManager
         val adapter = FoodCategoryPagerAdapter(manager)
         viewPager.adapter = adapter
 
         foodCategoryVm.outputs.foodCategoryList()
             .map {
                 it.map { item ->
+                    item as FoodCategory
+                    val key = item.id.toString()
                     FoodTabItemFragment(
-                        item as FoodCategory,
-                        provider.get(RestaurantViewModel.ViewModelImpl::class.java)
+                        item,
+                        provider[key, RestaurantViewModel.ViewModelImpl::class.java],
+                        provider[key, TopScrollVIewModel.ViewModelImpl::class.java]
                     )
                 }
             }
@@ -60,12 +63,13 @@ class FoodTabFragment @Inject constructor(
 
         tabLayout.setupWithViewPager(viewPager)
 
-
         arguments?.let {
             tab_textView.text = it["category"].toString()
         }
 
-        viewPager.currentItem
+        // TODO 선택된 카테고리 탭에서 시작
+        // TODO 선택된 카테고리 탭 유지하기
+//        viewPager.currentItem
 
     }
 }

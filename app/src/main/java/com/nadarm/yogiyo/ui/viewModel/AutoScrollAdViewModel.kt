@@ -93,6 +93,7 @@ interface AutoScrollAdViewModel {
                 .withLatestFrom(scrollPositionChanged) { _, position -> position + 1 }
 
             startAdActivity = itemClicked
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .map { it as Ad }
 
         }

@@ -15,6 +15,7 @@ import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.databinding.FragmentFoodHomeBinding
 import com.nadarm.yogiyo.di.ActivityScope
 import com.nadarm.yogiyo.ui.activity.AdActivity
+import com.nadarm.yogiyo.ui.activity.RestaurantActivity
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.listener.BaseScrollListener
 import com.nadarm.yogiyo.ui.listener.ScrollStateListener
@@ -23,6 +24,7 @@ import com.nadarm.yogiyo.ui.viewModel.AutoScrollAdViewModel
 import com.nadarm.yogiyo.ui.viewModel.FoodCategoryViewModel
 import com.nadarm.yogiyo.ui.viewModel.RestaurantViewModel
 import com.nadarm.yogiyo.util.subscribeMainThread
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -140,6 +142,9 @@ class FoodHomeFragment @Inject constructor(
             }
             .addTo(compositeDisposable)
 
+        foodCategoryVm.outputs.navigateCategoryTab()
+            .subscribeMainThread(Schedulers.computation(), compositeDisposable, this::navigate)
+
         bottomAdVm.outputs.adItemList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -192,8 +197,11 @@ class FoodHomeFragment @Inject constructor(
                 plusNewAdapter.getRecyclerView()?.scrollToPosition(position)
             }
 
-        topAdVm.outputs.startAdActivity()
-            .mergeWith(bottomAdVm.outputs.startAdActivity())
+        Flowable
+            .merge(
+                topAdVm.outputs.startAdActivity(),
+                bottomAdVm.outputs.startAdActivity()
+            )
             .throttleFirst(1000, TimeUnit.MILLISECONDS)
             .subscribeMainThread(
                 Schedulers.computation(),
@@ -201,9 +209,17 @@ class FoodHomeFragment @Inject constructor(
                 this::startAdActivity
             )
 
-        foodCategoryVm.outputs.navigateCategoryTab()
+        Flowable
+            .merge(
+                plusPopularVm.outputs.startRestaurantActivity(),
+                plusNewVm.outputs.startRestaurantActivity()
+            )
             .throttleFirst(1000, TimeUnit.MILLISECONDS)
-            .subscribeMainThread(Schedulers.computation(), compositeDisposable, this::navigate)
+            .subscribeMainThread(
+                Schedulers.computation(),
+                compositeDisposable,
+                this::startRestaurantActivity
+            )
 
         topAdVm.inputs.setAdType(Ad.Type.Large)
         topAdVm.inputs.scrollStateChanged(RecyclerView.SCROLL_STATE_IDLE)
@@ -237,6 +253,12 @@ class FoodHomeFragment @Inject constructor(
         val intent = Intent(context, AdActivity::class.java)
         intent.putExtra("adId", ad.id)
         intent.putExtra("pageUrl", ad.pageUrl)
+        startActivity(intent)
+    }
+
+    private fun startRestaurantActivity(restaurant: Restaurant) {
+        val intent = Intent(context, RestaurantActivity::class.java)
+        intent.putExtra("restaurantId", restaurant.id)
         startActivity(intent)
     }
 }

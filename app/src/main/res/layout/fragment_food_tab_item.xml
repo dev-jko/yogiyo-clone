@@ -5,6 +5,17 @@
 
     <data>
 
+        <variable
+            name="topButtonDelegate"
+            type="com.nadarm.yogiyo.ui.viewModel.TopScrollVIewModel.Inputs" />
+
+        <variable
+            name="adapter"
+            type="com.nadarm.yogiyo.ui.adapter.BaseListAdapter" />
+
+        <variable
+            name="scrollListener"
+            type="com.nadarm.yogiyo.ui.listener.BaseScrollListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +28,8 @@
             android:id="@+id/restaurantsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:bindAdapter="@{adapter}"
+            app:bindScrollListener="@{scrollListener}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,8 +53,10 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/translucent_border_shape"
+            android:onClick="@{() -> topButtonDelegate.topButtonClicked()}"
             android:stateListAnimator="@null"
             android:text="위"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.95"

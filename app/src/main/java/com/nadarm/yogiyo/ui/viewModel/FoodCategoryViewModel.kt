@@ -9,6 +9,7 @@ import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 interface FoodCategoryViewModel {
@@ -38,6 +39,7 @@ interface FoodCategoryViewModel {
                 .addTo(compositeDisposable)
 
             navigateCategoryTab = itemClicked
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .map { it as FoodCategory }
         }
 

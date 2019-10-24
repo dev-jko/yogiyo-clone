@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.AdActivity"></activity>
+        <activity
+            android:name=".ui.activity.RestaurantActivity"
+            android:label="@string/title_activity_restaurant"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ui.activity.AdActivity" />
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/AppTheme.Splash">

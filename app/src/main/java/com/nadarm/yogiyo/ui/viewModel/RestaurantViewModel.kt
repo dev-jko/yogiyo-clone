@@ -3,13 +3,13 @@ package com.nadarm.yogiyo.ui.viewModel
 import com.nadarm.yogiyo.data.repository.RestaurantRepository
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.BaseItem
+import com.nadarm.yogiyo.ui.model.Restaurant
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.zipWith
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 interface RestaurantViewModel {
@@ -22,6 +22,7 @@ interface RestaurantViewModel {
     interface Outputs {
         fun restaurantList(): Flowable<List<BaseItem>>
         fun scrollPosition(): Flowable<Int>
+        fun startRestaurantActivity(): Flowable<Restaurant>
     }
 
     class ViewModelImpl @Inject constructor(
@@ -35,6 +36,8 @@ interface RestaurantViewModel {
 
         private val restaurantList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
         private val scrollPosition: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(0)
+        private val startRestaurantActivity: Flowable<Restaurant>
+
 
         val inputs: Inputs = this
         val outputs: Outputs = this
@@ -48,16 +51,21 @@ interface RestaurantViewModel {
                     restaurantRepo.getRestaurants(isPlus, categoryId)
                         .subscribeOn(Schedulers.io())
                 }
-                .subscribeBy { restaurantList.onNext(it) }
-                .addTo(compositeDisposable)
+                .subscribe(restaurantList)
 
             lastScrollPosition
                 .subscribe(scrollPosition)
+
+            startRestaurantActivity = itemClicked
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .map { it as Restaurant }
+
 
         }
 
         override fun restaurantList(): Flowable<List<BaseItem>> = restaurantList
         override fun scrollPosition(): Flowable<Int> = scrollPosition
+        override fun startRestaurantActivity(): Flowable<Restaurant> = startRestaurantActivity
 
         override fun itemClicked(item: BaseItem) {
             itemClicked.onNext(item)

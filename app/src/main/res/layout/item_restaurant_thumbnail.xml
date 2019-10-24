@@ -8,6 +8,10 @@
             name="item"
             type="com.nadarm.yogiyo.ui.model.Restaurant" />
 
+        <variable
+            name="delegate"
+            type="com.nadarm.yogiyo.ui.adapter.BaseListAdapter.Delegate" />
+
     </data>
 
     <LinearLayout
@@ -15,7 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:background="@color/colorLightGray">
+        android:background="@color/colorLightGray"
+        android:onClick="@{()->delegate.itemClicked(item)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -48,12 +53,12 @@
                 android:layout_height="wrap_content"
                 android:text="@{item.name}"
                 android:textAlignment="viewStart"
-                app:layout_constraintVertical_chainStyle="packed"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/reviewLayout"
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
 
                 />
 
