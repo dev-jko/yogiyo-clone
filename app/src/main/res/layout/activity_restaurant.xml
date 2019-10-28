@@ -5,10 +5,6 @@
 
     <data>
 
-        <variable
-            name="restaurant"
-            type="com.nadarm.yogiyo.ui.model.Restaurant" />
-
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -39,12 +35,10 @@
                 app:expandedTitleTextAppearance="@style/CollapsingToolbarTheme.ExpandedTitle"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:scrimAnimationDuration="0"
-
-                app:title="@{restaurant.name}"
                 app:toolbarId="@+id/toolbar">
 
                 <ImageView
-                    bindImage="@{restaurant.thumbnailUrl}"
+                    android:id="@+id/restaurant_detail_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
@@ -66,10 +60,10 @@
                     android:paddingEnd="0dp">
 
                     <TextView
+                        android:id="@+id/restaurant_detail_text_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@{restaurant.name}"
                         android:textColor="@color/colorBlack"
                         android:textSize="25sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +96,6 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp">
 
-
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/restaurant_tab_layout"
                     android:layout_width="match_parent"
@@ -115,45 +108,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tabSelectedTextColor="@color/colorAccent"
-                    app:tabTextColor="@color/colorDarkGray">
-
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="메뉴" />
-
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="클린리뷰" />
-
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="정보" />
-
-                </com.google.android.material.tabs.TabLayout>
+                    app:tabTextColor="@color/colorDarkGray" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
-        <androidx.core.widget.NestedScrollView
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/restaurant_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:context=".ui.activity.RestaurantActivity"
-            tools:showIn="@layout/activity_restaurant">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"
-                android:text="@string/large_text" />
-
-        </androidx.core.widget.NestedScrollView>
-
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

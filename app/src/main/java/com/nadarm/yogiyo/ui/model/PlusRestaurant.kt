@@ -3,7 +3,7 @@ package com.nadarm.yogiyo.ui.model
 data class PlusRestaurant(
     override val id: Long,
     override val name: String,
-    override val categories: Array<String>,
+    override val categories: List<String>,
     override val thumbnailUrl: String,
     override val address: String,
     override val lng: Double,
@@ -14,8 +14,6 @@ data class PlusRestaurant(
     override val deliveryFee: Int,
     override val minOrderAmount: Int,
     override val paymentMethods: String,
-    override val createdAt: String,
-    override val updatedAt: String,
     override val isPlus: Boolean
 ) : Restaurant(
     id,
@@ -31,7 +29,5 @@ data class PlusRestaurant(
     deliveryFee,
     minOrderAmount,
     paymentMethods,
-    createdAt,
-    updatedAt,
     isPlus
 )

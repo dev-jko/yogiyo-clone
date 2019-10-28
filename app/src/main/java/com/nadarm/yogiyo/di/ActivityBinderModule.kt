@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class ActivityBinder {
+abstract class ActivityBinderModule {
 
     @ContributesAndroidInjector
     @ActivityScope
@@ -17,7 +17,7 @@ abstract class ActivityBinder {
     @ActivityScope
     abstract fun bindMainActivity(): MainActivity
 
-    @ContributesAndroidInjector(modules = [])
+    @ContributesAndroidInjector(modules = [RestaurantActivityModule::class])
     @ActivityScope
     abstract fun bindRestaurantActivity(): RestaurantActivity
 

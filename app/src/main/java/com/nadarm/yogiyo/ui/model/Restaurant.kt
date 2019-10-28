@@ -3,7 +3,7 @@ package com.nadarm.yogiyo.ui.model
 open class Restaurant(
     open val id: Long,
     open val name: String,
-    open val categories: Array<String>,
+    open val categories: List<String>,
     open val thumbnailUrl: String,
     open val address: String,
     open val lng: Double,
@@ -14,7 +14,5 @@ open class Restaurant(
     open val deliveryFee: Int,
     open val minOrderAmount: Int,
     open val paymentMethods: String,
-    open val createdAt: String,
-    open val updatedAt: String,
     open val isPlus:Boolean
 ) : BaseItem.SingleItem()

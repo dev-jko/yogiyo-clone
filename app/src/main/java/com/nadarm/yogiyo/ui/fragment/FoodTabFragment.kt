@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.databinding.FragmentFoodTabBinding
-import com.nadarm.yogiyo.ui.adapter.FoodCategoryPagerAdapter
+import com.nadarm.yogiyo.ui.adapter.BaseFragmentPagerAdapter
 import com.nadarm.yogiyo.ui.model.FoodCategory
 import com.nadarm.yogiyo.ui.viewModel.FoodCategoryViewModel
 import com.nadarm.yogiyo.ui.viewModel.RestaurantViewModel
@@ -35,7 +35,7 @@ class FoodTabFragment @Inject constructor(
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_food_tab, container, false)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -43,8 +43,9 @@ class FoodTabFragment @Inject constructor(
         super.onActivityCreated(savedInstanceState)
 
         val manager = childFragmentManager
-        val adapter = FoodCategoryPagerAdapter(manager)
+        val adapter = BaseFragmentPagerAdapter(manager)
         viewPager.adapter = adapter
+        tabLayout.setupWithViewPager(viewPager)
 
         foodCategoryVm.outputs.foodCategoryList()
             .map {
@@ -61,7 +62,7 @@ class FoodTabFragment @Inject constructor(
             .subscribeMainThread(Schedulers.io(), compositeDisposable) { adapter.tabs = it }
 
 
-        tabLayout.setupWithViewPager(viewPager)
+
 
         arguments?.let {
             tab_textView.text = it["category"].toString()

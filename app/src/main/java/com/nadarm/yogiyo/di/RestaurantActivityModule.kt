@@ -1,17 +1,13 @@
 package com.nadarm.yogiyo.di
 
 import androidx.lifecycle.ViewModelProvider
-import com.nadarm.yogiyo.ui.activity.MainActivity
+import com.nadarm.yogiyo.ui.activity.RestaurantActivity
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 
-@Module(includes = [MainActivityProviderModule::class])
-interface MainActivityModule {
-
-//    @FragmentScope
-//    @ContributesAndroidInjector(modules = [FoodModule.FoodProviderModule::class])
-//    abstract fun bindMainFoodFragment(): FoodHomeFragment
+@Module(includes = [RestaurantActivityProviderModule::class])
+interface RestaurantActivityModule {
 
     @Binds
     @ActivityScope
@@ -20,12 +16,12 @@ interface MainActivityModule {
 }
 
 @Module
-class MainActivityProviderModule {
+class RestaurantActivityProviderModule {
 
     @Provides
     @ActivityScope
     fun provideViewModelProvider(
-        activity: MainActivity,
+        activity: RestaurantActivity,
         factory: ViewModelProvider.Factory
     ): ViewModelProvider {
         return ViewModelProvider(activity, factory)

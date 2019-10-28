@@ -8,7 +8,7 @@ import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
 
-@Module(includes = [DataProvidingModule::class])
+@Module(includes = [DataProviderModule::class])
 interface DataBindingModule {
 
     @Singleton
@@ -37,7 +37,7 @@ interface DataBindingModule {
 }
 
 @Module
-object DataProvidingModule {
+object DataProviderModule {
 
 
 }

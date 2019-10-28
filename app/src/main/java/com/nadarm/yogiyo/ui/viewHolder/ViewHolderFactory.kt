@@ -16,15 +16,7 @@ object ViewHolderFactory {
     ): ItemViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding: ViewDataBinding = DataBindingUtil.inflate(inflater, viewType, parent, false)
-
         return ItemViewHolder(binding)
-//        return when (viewType) {
-//            R.layout.item_plus_new_restaurant_list,
-//            R.layout.item_plus_popular_restaurant_list,
-//            R.layout.item_grid_list,
-//            R.layout.item_auto_scroll_ad_list -> ListItemViewHolder(binding)
-//            else -> ItemViewHolder(binding)
-//    }
     }
 
     fun getItemViewType(item: BaseItem): Int = when (item) {
@@ -37,6 +29,7 @@ object ViewHolderFactory {
         is Restaurant -> R.layout.item_restaurant_thumbnail
         is PlusNewRestaurantList -> R.layout.item_plus_new_restaurant_list
         is PlusPopularRestaurantList -> R.layout.item_plus_popular_restaurant_list
+        is LabeledDishes -> R.layout.item_labeled_dishes
         is GridList -> R.layout.item_grid_list
         is AutoScrollAdList -> R.layout.item_auto_scroll_ad_list
         else -> R.layout.item_blank
