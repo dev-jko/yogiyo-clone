@@ -9,7 +9,10 @@ import com.nadarm.yogiyo.ui.model.Restaurant
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.combineLatest
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 interface RestaurantDetailViewModel {
@@ -21,7 +24,8 @@ interface RestaurantDetailViewModel {
     interface Outputs {
         fun restaurantInfo(): Flowable<Restaurant>
         fun numOfMenu(): Flowable<Int>
-        fun dishes(): Flowable<List<BaseItem>>
+        fun dishItems(): Flowable<List<BaseItem>>
+        fun showDishDetail(): Flowable<Dish>
     }
 
 
@@ -35,7 +39,11 @@ interface RestaurantDetailViewModel {
 
         private val restaurantInfo: BehaviorProcessor<Restaurant> = BehaviorProcessor.create()
         private val numOfMenu: BehaviorProcessor<Int> = BehaviorProcessor.create()
-        private val dishes: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
+        private val showDishDetail: BehaviorProcessor<Dish> = BehaviorProcessor.create()
+        private val dishItems: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
+
+        private val labelState: MutableMap<String, Boolean> = HashMap<String, Boolean>()
+        private val labels: BehaviorProcessor<Map<String, Boolean>> = BehaviorProcessor.create()
 
         val inputs: Inputs = this
         val outputs: Outputs = this
@@ -47,6 +55,7 @@ interface RestaurantDetailViewModel {
                     restaurantRepo.getRestaurantDetail(id)
                         .subscribeOn(Schedulers.io())
                 }
+                .subscribeOn(Schedulers.io())
 
             detail
                 .map { it.restaurant }
@@ -56,17 +65,54 @@ interface RestaurantDetailViewModel {
                 .map { it.numOfMenu }
                 .subscribe(numOfMenu)
 
-            detail
+            val originalDishes = detail
                 .map { it.labels }
-                .subscribe(dishes)
+                .doOnNext {
+                    it.forEach { label ->
+                        labelState[label.label] = false
+                    }
+                    labelState[it[0].label] = true
+                    labels.onNext(labelState)
+                }
 
+            labels
+                .combineLatest(originalDishes)
+                .map {
+                    val state = it.first
+                    val list = it.second
+                    val newList = MutableList<BaseItem>(0) { BaseItem.BlankItem }
+                    list.forEach { item ->
+                        newList.add(item)
+                        if (state.getOrElse(item.label) { false }) {
+                            item.dishes.forEach { dish ->
+                                newList.add(dish)
+                            }
+                        }
+                        newList.add(BaseItem.BlankItem)
+                    }
+                    return@map newList
+                }
+                .subscribe(dishItems)
+
+            dishItemClicked
+                .throttleFirst(500, TimeUnit.MILLISECONDS)
+                .subscribe(showDishDetail)
+
+            labelItemClicked
+                .subscribeOn(Schedulers.computation())
+                .subscribe {
+                    labelState[it.label] = !(labelState.getOrElse(it.label) { false })
+                    labels.onNext(labelState)
+                }
+                .addTo(compositeDisposable)
 
         }
 
 
         override fun restaurantInfo(): Flowable<Restaurant> = restaurantInfo
         override fun numOfMenu(): Flowable<Int> = numOfMenu
-        override fun dishes(): Flowable<List<BaseItem>> = dishes
+        override fun dishItems(): Flowable<List<BaseItem>> = dishItems
+        override fun showDishDetail(): Flowable<Dish> = showDishDetail
 
         override fun itemClicked(item: BaseItem) {
             when (item) {

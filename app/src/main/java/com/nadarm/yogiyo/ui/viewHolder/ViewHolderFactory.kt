@@ -30,6 +30,7 @@ object ViewHolderFactory {
         is PlusNewRestaurantList -> R.layout.item_plus_new_restaurant_list
         is PlusPopularRestaurantList -> R.layout.item_plus_popular_restaurant_list
         is LabeledDishes -> R.layout.item_labeled_dishes
+        is Dish -> R.layout.item_dish
         is GridList -> R.layout.item_grid_list
         is AutoScrollAdList -> R.layout.item_auto_scroll_ad_list
         else -> R.layout.item_blank
@@ -40,8 +41,11 @@ object ViewHolderFactory {
             is Ad -> oldItem.id == (newItem as Ad).id
             is FoodCategory -> oldItem.id == (newItem as FoodCategory).id
             is Restaurant -> oldItem.id == (newItem as Restaurant).id
+            is LabeledDishes -> oldItem.label == (newItem as LabeledDishes).label
+            is Dish -> oldItem.id == (newItem as Dish).id
             is BaseItem.ListItem -> oldItem.adapter == (newItem as BaseItem.ListItem).adapter
-            else -> true
+            is BaseItem.BlankItem -> true
+            else -> false
         }
 
 

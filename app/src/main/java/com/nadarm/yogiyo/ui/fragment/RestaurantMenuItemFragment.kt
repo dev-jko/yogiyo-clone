@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.databinding.FragmentRestaurantMenuItemBinding
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
+import com.nadarm.yogiyo.ui.model.Dish
 import com.nadarm.yogiyo.ui.viewModel.RestaurantDetailViewModel
 import com.nadarm.yogiyo.util.subscribeMainThread
 import io.reactivex.schedulers.Schedulers
@@ -17,7 +19,8 @@ class RestaurantMenuItemFragment(
 ) : BaseItemFragment() {
 
     private lateinit var binding: FragmentRestaurantMenuItemBinding
-    private val adapter: BaseListAdapter = BaseListAdapter(restaurantDetailVm)
+    private val dishAdapter: BaseListAdapter = BaseListAdapter(restaurantDetailVm)
+    private val thumbnailDishAdapter: BaseListAdapter = BaseListAdapter(restaurantDetailVm)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,15 +39,29 @@ class RestaurantMenuItemFragment(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        binding.adapter = adapter
+        binding.thumbnailDishAdapter = thumbnailDishAdapter
+        binding.dishAdapter = dishAdapter
 
-        restaurantDetailVm.outputs.dishes()
+        restaurantDetailVm.outputs.showDishDetail()
+
+        restaurantDetailVm.outputs.dishItems()
             .subscribeMainThread(Schedulers.io(), compositeDisposable) {
-                adapter.submitList(it)
+                dishAdapter.submitList(it)
             }
+
+        restaurantDetailVm.outputs.showDishDetail()
+            .subscribeMainThread(
+                Schedulers.computation(),
+                compositeDisposable,
+                this::showDishDetail
+            )
 
 
     }
 
     override fun getTitle(): String = "메뉴"
+
+    private fun showDishDetail(dish: Dish) {
+        Toast.makeText(context, dish.name, Toast.LENGTH_SHORT).show()
+    }
 }
