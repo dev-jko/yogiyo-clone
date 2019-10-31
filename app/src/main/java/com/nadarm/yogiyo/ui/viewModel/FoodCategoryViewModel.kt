@@ -4,6 +4,7 @@ import com.nadarm.yogiyo.data.repository.FoodCategoryRepository
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.BaseItem
 import com.nadarm.yogiyo.ui.model.FoodCategory
+import dagger.multibindings.StringKey
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
@@ -11,6 +12,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 
 interface FoodCategoryViewModel {
 
@@ -22,7 +24,8 @@ interface FoodCategoryViewModel {
     }
 
     class ViewModelImpl @Inject constructor(
-        private val foodCategoryRepo: FoodCategoryRepository
+        private val foodCategoryRepo: FoodCategoryRepository,
+        @field:Named("token") private val token:String // TODO token 처리
     ) : BaseViewModel(), Inputs, Outputs {
 
         private val itemClicked: PublishProcessor<BaseItem> = PublishProcessor.create()
@@ -34,7 +37,7 @@ interface FoodCategoryViewModel {
         val outputs: Outputs = this
 
         init {
-            foodCategoryRepo.getCategories()
+            foodCategoryRepo.getCategories(token)
                 .subscribeBy { foodCategoryList.onNext(it) }
                 .addTo(compositeDisposable)
 
