@@ -5,7 +5,7 @@
     <string name="title_activity_restaurant">RestaurantActivity</string>
     <string name="action_settings">Settings</string>
     <string name="token">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTcxNzA0MDk1LCJleHAiOjE1NzUzMDQwOTV9.WFPbwyhOKJa6r9jmlJE4Pq1VPG3lVDq4daMTiFH2yQs</string>
-    <string name="base_url">http://70.12.247.65:3000/</string>
+    <string name="base_url">http://13.124.8.90:3000/</string>
 </resources>
 
 

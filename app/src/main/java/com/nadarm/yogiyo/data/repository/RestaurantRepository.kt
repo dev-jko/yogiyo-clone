@@ -6,14 +6,22 @@ import io.reactivex.Single
 
 interface RestaurantRepository {
 
-    fun getRestaurants(isPlus: Boolean, category: Long): Single<List<Restaurant>>
+    fun getRestaurants(
+        isPlus: Boolean,
+        categoryId: Long,
+        token: String
+    ): Single<List<Restaurant>>
 
-    fun getRestaurantDetail(restaurantId:Long):Single<RestaurantDetail>
+    fun getRestaurantDetail(
+        restaurantId: Long,
+        baseUrl: String,
+        token: String
+    ): Single<RestaurantDetail>
 
 
 }
 
 interface RestaurantDataSource : RestaurantRepository {
     interface Cache : RestaurantDataSource
-
+    interface Remote : RestaurantDataSource
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import com.nadarm.yogiyo.R
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.IntoMap
 import dagger.multibindings.StringKey
 import javax.inject.Singleton
 
@@ -11,20 +12,14 @@ import javax.inject.Singleton
 class AppModule {
 
     @Provides
-    @Singleton
-    fun provideApp(application: Application): Application {
-        return application
-    }
-
-    @Provides
-    @Singleton
+    @IntoMap
     @StringKey("token")
     fun provideToken(application: Application): String {
         return application.getString(R.string.token)
     }
 
     @Provides
-    @Singleton
+    @IntoMap
     @StringKey("baseUrl")
     fun provideBaseUrl(application: Application): String {
         return application.getString(R.string.base_url)

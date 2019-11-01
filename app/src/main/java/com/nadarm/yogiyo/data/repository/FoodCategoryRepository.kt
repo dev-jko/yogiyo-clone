@@ -5,7 +5,7 @@ import io.reactivex.Single
 
 interface FoodCategoryRepository {
 
-    fun getCategories(token: String): Single<List<FoodCategory>>
+    fun getCategories(token: String, baseUrl: String): Single<List<FoodCategory>>
 
 }
 

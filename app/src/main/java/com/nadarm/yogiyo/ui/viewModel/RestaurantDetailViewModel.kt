@@ -30,7 +30,8 @@ interface RestaurantDetailViewModel {
 
 
     class ViewModelImpl @Inject constructor(
-        private val restaurantRepo: RestaurantRepository
+        private val restaurantRepo: RestaurantRepository,
+        private val stringMap: Map<String, String>
     ) : BaseViewModel(), Inputs, Outputs {
 
         private val restaurantId: PublishProcessor<Long> = PublishProcessor.create()
@@ -44,6 +45,9 @@ interface RestaurantDetailViewModel {
 
         private val labelState: MutableMap<String, Boolean> = HashMap<String, Boolean>()
         private val labels: BehaviorProcessor<Map<String, Boolean>> = BehaviorProcessor.create()
+        private val baseUrl = stringMap["baseUrl"]?: error("baseUrl error")
+        private val token = stringMap["token"]?: error("token error")
+
 
         val inputs: Inputs = this
         val outputs: Outputs = this
@@ -52,7 +56,7 @@ interface RestaurantDetailViewModel {
 
             val detail = restaurantId
                 .flatMapSingle { id ->
-                    restaurantRepo.getRestaurantDetail(id)
+                    restaurantRepo.getRestaurantDetail(id, baseUrl, token)
                         .subscribeOn(Schedulers.io())
                 }
                 .subscribeOn(Schedulers.io())

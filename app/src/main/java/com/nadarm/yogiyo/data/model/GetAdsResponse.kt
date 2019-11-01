@@ -7,9 +7,8 @@ data class GetAdsResponse(
 
 data class Ad(
     val id: Long,
-    val type: Int,
-    val imageUrl: String,
-    val pageUrl: String,
+    val type: String,
+    val imgUrl: String,
     val startDate: String,
     val endDate: String
 )

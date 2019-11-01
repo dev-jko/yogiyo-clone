@@ -3,11 +3,8 @@ package com.nadarm.yogiyo.ui.model
 data class PlusRestaurant(
     override val id: Long,
     override val name: String,
-    override val categories: List<String>,
     override val thumbnailUrl: String,
     override val address: String,
-    override val lng: Double,
-    override val lat: Double,
     override val openTime: String,
     override val deliveryTime: Int,
     override val representativeMenus: String,
@@ -18,11 +15,8 @@ data class PlusRestaurant(
 ) : Restaurant(
     id,
     name,
-    categories,
     thumbnailUrl,
     address,
-    lng,
-    lat,
     openTime,
     deliveryTime,
     representativeMenus,

@@ -3,11 +3,8 @@ package com.nadarm.yogiyo.ui.model
 open class Restaurant(
     open val id: Long,
     open val name: String,
-    open val categories: List<String>,
     open val thumbnailUrl: String,
     open val address: String,
-    open val lng: Double,
-    open val lat: Double,
     open val openTime: String,
     open val deliveryTime: Int,
     open val representativeMenus: String,

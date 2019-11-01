@@ -12,8 +12,8 @@ class FoodCategoryDataRepository @Inject constructor(
     private val remote: FoodCategoryDataSource.Remote
 ) : FoodCategoryRepository {
 
-    override fun getCategories(token: String): Single<List<FoodCategory>> {
+    override fun getCategories(token: String, baseUrl: String): Single<List<FoodCategory>> {
         // TODO FoodCategoryDataRepository - cache
-        return remote.getCategories(token)
+        return remote.getCategories(token, baseUrl)
     }
 }

@@ -7,7 +7,7 @@ import retrofit2.http.Header
 
 interface FoodCategoryService {
 
-    @GET("api/categories")
+    @GET("api/restaurants/categories")
     fun getFoodCategories(
         @Header("x-access-token") token: String
     ): Single<GetFoodCategoriesResponse>

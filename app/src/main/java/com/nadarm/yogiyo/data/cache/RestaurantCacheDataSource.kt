@@ -15,11 +15,8 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
         Restaurant(
             1,
             "카페마마스 잠실점",
-            listOf("야식", "프렌차이즈", "한식"),
             "https://i.imgur.com/dlFdn4F.png",
             "역삼동",
-            127.029799209808,
-            37.4970170754811,
             "11:00 - 01:00",
             60,
             "구이삼겹 1인, 구이삼겹 2인",
@@ -57,58 +54,8 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
             Restaurant(
                 1,
                 "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
                 "https://i.imgur.com/dlFdn4F.png",
                 "역삼동",
-                127.029799209808,
-                37.4970170754811,
-                "11:00 - 01:00",
-                60,
-                "구이삼겹 1인, 구이삼겹 2인",
-                2000,
-                12000,
-                "creditcard::online",
-                true
-            ),
-            Restaurant(
-                2,
-                "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
-                "https://i.imgur.com/dlFdn4F.png",
-                "역삼동",
-                127.029799209808,
-                37.4970170754811,
-                "11:00 - 01:00",
-                60,
-                "구이삼겹 1인, 구이삼겹 2인",
-                2000,
-                12000,
-                "creditcard::online",
-                true
-            ), Restaurant(
-                3,
-                "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
-                "https://i.imgur.com/dlFdn4F.png",
-                "역삼동",
-                127.029799209808,
-                37.4970170754811,
-                "11:00 - 01:00",
-                60,
-                "구이삼겹 1인, 구이삼겹 2인",
-                2000,
-                12000,
-                "creditcard::online",
-                true
-            ),
-            Restaurant(
-                1,
-                "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
-                "https://i.imgur.com/dlFdn4F.png",
-                "역삼동",
-                127.029799209808,
-                37.4970170754811,
                 "11:00 - 01:00",
                 60,
                 "구이삼겹 1인, 구이삼겹 2인",
@@ -120,11 +67,8 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
             Restaurant(
                 2,
                 "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
                 "https://i.imgur.com/dlFdn4F.png",
                 "역삼동",
-                127.029799209808,
-                37.4970170754811,
                 "11:00 - 01:00",
                 60,
                 "구이삼겹 1인, 구이삼겹 2인",
@@ -132,14 +76,12 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
                 12000,
                 "creditcard::online",
                 false
-            ), Restaurant(
+            ),
+            Restaurant(
                 3,
                 "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
                 "https://i.imgur.com/dlFdn4F.png",
                 "역삼동",
-                127.029799209808,
-                37.4970170754811,
                 "11:00 - 01:00",
                 60,
                 "구이삼겹 1인, 구이삼겹 2인",
@@ -154,11 +96,8 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
             PlusRestaurant(
                 1,
                 "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
                 "https://i.imgur.com/dlFdn4F.png",
                 "역삼동",
-                127.029799209808,
-                37.4970170754811,
                 "11:00 - 01:00",
                 60,
                 "구이삼겹 1인, 구이삼겹 2인",
@@ -170,26 +109,8 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
             PlusRestaurant(
                 2,
                 "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
                 "https://i.imgur.com/dlFdn4F.png",
                 "역삼동",
-                127.029799209808,
-                37.4970170754811,
-                "11:00 - 01:00",
-                60,
-                "구이삼겹 1인, 구이삼겹 2인",
-                2000,
-                12000,
-                "creditcard::online",
-                true
-            ), PlusRestaurant(
-                3,
-                "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
-                "https://i.imgur.com/dlFdn4F.png",
-                "역삼동",
-                127.029799209808,
-                37.4970170754811,
                 "11:00 - 01:00",
                 60,
                 "구이삼겹 1인, 구이삼겹 2인",
@@ -199,63 +120,29 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
                 true
             ),
             PlusRestaurant(
-                1,
-                "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
-                "https://i.imgur.com/dlFdn4F.png",
-                "역삼동",
-                127.029799209808,
-                37.4970170754811,
-                "11:00 - 01:00",
-                60,
-                "구이삼겹 1인, 구이삼겹 2인",
-                2000,
-                12000,
-                "creditcard::online",
-                false
-            ),
-            PlusRestaurant(
-                2,
-                "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
-                "https://i.imgur.com/dlFdn4F.png",
-                "역삼동",
-                127.029799209808,
-                37.4970170754811,
-                "11:00 - 01:00",
-                60,
-                "구이삼겹 1인, 구이삼겹 2인",
-                2000,
-                12000,
-                "creditcard::online",
-                false
-            ), PlusRestaurant(
                 3,
                 "카페마마스 잠실점",
-                listOf("야식", "프렌차이즈", "한식"),
                 "https://i.imgur.com/dlFdn4F.png",
                 "역삼동",
-                127.029799209808,
-                37.4970170754811,
                 "11:00 - 01:00",
                 60,
                 "구이삼겹 1인, 구이삼겹 2인",
                 2000,
                 12000,
                 "creditcard::online",
-                false
+                true
             )
         )
 
-        restaurants.addAll(items + items + items)
-        plusRestaurants.addAll(items2 + items2 + items2)
+        restaurants.addAll(items + items + items + items + items + items + items + items + items + items + items + items)
+        plusRestaurants.addAll(items2 + items2 + items2 + items2 + items2 + items2 + items2 + items2 + items2 + items2 + items2)
     }
 
-    override fun getRestaurants(isPlus: Boolean, category: Long): Single<List<Restaurant>> {
-//        val restaurants = this.restaurants
-//            .filter { it.isPlus == isPlus }
-//            .filter { it.categories.contains(category) }
-//        return Single.just(restaurants)
+    override fun getRestaurants(
+        isPlus: Boolean,
+        categoryId: Long,
+        token: String
+    ): Single<List<Restaurant>> {
         val result = if (isPlus) {
             plusRestaurants
         } else {
@@ -264,7 +151,11 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
         return Single.just(result)
     }
 
-    override fun getRestaurantDetail(restaurantId: Long): Single<RestaurantDetail> {
+    override fun getRestaurantDetail(
+        restaurantId: Long,
+        baseUrl: String,
+        token: String
+    ): Single<RestaurantDetail> {
         return Single.just(restaurantDetail)
     }
 }

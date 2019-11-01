@@ -9,14 +9,25 @@ import javax.inject.Singleton
 
 @Singleton
 class RestaurantDataRepository @Inject constructor(
-    private val cache: RestaurantDataSource.Cache
+    private val cache: RestaurantDataSource.Cache,
+    private val remote: RestaurantDataSource.Remote
 ) : RestaurantRepository {
 
-    override fun getRestaurants(isPlus: Boolean, category: Long): Single<List<Restaurant>> {
-        return cache.getRestaurants(isPlus, category)
+    override fun getRestaurants(
+        isPlus: Boolean,
+        categoryId: Long,
+        token: String
+    ): Single<List<Restaurant>> {
+//        return cache.getRestaurants(isPlus, category, baseUrl, token) TODO cache
+        return remote.getRestaurants(isPlus, categoryId, token)
     }
 
-    override fun getRestaurantDetail(restaurantId: Long): Single<RestaurantDetail> {
-        return cache.getRestaurantDetail(restaurantId)
+    override fun getRestaurantDetail(
+        restaurantId: Long,
+        baseUrl: String,
+        token: String
+    ): Single<RestaurantDetail> {
+//        return cache.getRestaurantDetail(restaurantId, baseUrl, token)  TODO cache
+        return remote.getRestaurantDetail(restaurantId, baseUrl, token)
     }
 }

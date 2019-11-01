@@ -4,15 +4,14 @@ import com.nadarm.yogiyo.data.repository.FoodCategoryRepository
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
 import com.nadarm.yogiyo.ui.model.BaseItem
 import com.nadarm.yogiyo.ui.model.FoodCategory
-import dagger.multibindings.StringKey
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import javax.inject.Named
 
 interface FoodCategoryViewModel {
 
@@ -25,7 +24,7 @@ interface FoodCategoryViewModel {
 
     class ViewModelImpl @Inject constructor(
         private val foodCategoryRepo: FoodCategoryRepository,
-        @field:Named("token") private val token:String // TODO token 처리
+        stringMap: Map<String, String> // TODO token 처리
     ) : BaseViewModel(), Inputs, Outputs {
 
         private val itemClicked: PublishProcessor<BaseItem> = PublishProcessor.create()
@@ -33,11 +32,16 @@ interface FoodCategoryViewModel {
         private val foodCategoryList: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
         private val navigateCategoryTab: Flowable<FoodCategory>
 
+        private val token = stringMap["token"] ?: error("token is not provided") // TODO token 처리
+        private val baseUrl =
+            stringMap["baseUrl"] ?: error("baseUrl is not provided") // TODO baseUrl 처리
+
         val inputs: Inputs = this
         val outputs: Outputs = this
 
         init {
-            foodCategoryRepo.getCategories(token)
+            foodCategoryRepo.getCategories(token, baseUrl)
+                .subscribeOn(Schedulers.io())
                 .subscribeBy { foodCategoryList.onNext(it) }
                 .addTo(compositeDisposable)
 

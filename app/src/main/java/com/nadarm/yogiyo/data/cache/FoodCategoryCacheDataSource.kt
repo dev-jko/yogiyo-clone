@@ -30,7 +30,7 @@ class FoodCategoryCacheDataSource @Inject constructor() : FoodCategoryDataSource
         )
     }
 
-    override fun getCategories(token: String): Single<List<FoodCategory>> {
+    override fun getCategories(token: String, baseUrl: String): Single<List<FoodCategory>> {
         return Single.just(categories)
     }
 }
