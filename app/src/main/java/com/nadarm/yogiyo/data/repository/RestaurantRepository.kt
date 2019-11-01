@@ -14,7 +14,6 @@ interface RestaurantRepository {
 
     fun getRestaurantDetail(
         restaurantId: Long,
-        baseUrl: String,
         token: String
     ): Single<RestaurantDetail>
 

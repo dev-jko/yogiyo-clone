@@ -28,7 +28,7 @@ data class GetRestaurantDetailResponse(
     val numOfMenu: Int,
     @SerializedName("menus")
     @Expose
-    val menus: List<>
+    val menus: List<LabeledDishes>
 )
 
 data class Restaurant(
@@ -74,18 +74,24 @@ data class Restaurant(
 )
 
 data class LabeledDishes(
+    @SerializedName("name")
+    @Expose
+    val label: String,
+    @SerializedName("menus")
+    @Expose
+    val dishes: List<Dish>
 )
 
 data class Dish(
     @SerializedName("id")
     @Expose
-    val id: Int,
+    val id: Long,
     @SerializedName("name")
     @Expose
     val name: String,
     @SerializedName("restaurantId")
     @Expose
-    val restaurantId: Int,
+    val restaurantId: Long,
     @SerializedName("label")
     @Expose
     val label: String,

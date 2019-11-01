@@ -153,7 +153,6 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
 
     override fun getRestaurantDetail(
         restaurantId: Long,
-        baseUrl: String,
         token: String
     ): Single<RestaurantDetail> {
         return Single.just(restaurantDetail)

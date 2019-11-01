@@ -56,7 +56,7 @@ interface RestaurantDetailViewModel {
 
             val detail = restaurantId
                 .flatMapSingle { id ->
-                    restaurantRepo.getRestaurantDetail(id, baseUrl, token)
+                    restaurantRepo.getRestaurantDetail(id, token)
                         .subscribeOn(Schedulers.io())
                 }
                 .subscribeOn(Schedulers.io())

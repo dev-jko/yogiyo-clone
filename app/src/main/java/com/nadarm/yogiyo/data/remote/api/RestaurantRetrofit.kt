@@ -1,5 +1,6 @@
 package com.nadarm.yogiyo.data.remote.api
 
+import com.nadarm.yogiyo.data.model.GetRestaurantDetailResponse
 import com.nadarm.yogiyo.data.model.Restaurant
 import io.reactivex.Single
 import javax.inject.Inject
@@ -18,5 +19,12 @@ class RestaurantRetrofit @Inject constructor(
     fun getPlusRestaurants(categoryId: Long, token: String): Single<List<Restaurant>> {
         return service.getPlusRestaurants(categoryId, token)
             .map { it.restaurants }
+    }
+
+    fun getRestaurantDetail(
+        restaurantId: Long,
+        token: String
+    ): Single<GetRestaurantDetailResponse> {
+        return service.getRestaurantDetail(restaurantId, token)
     }
 }

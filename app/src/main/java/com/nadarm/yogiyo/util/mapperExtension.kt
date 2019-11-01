@@ -1,10 +1,9 @@
 package com.nadarm.yogiyo.util
 
-import com.nadarm.yogiyo.data.model.Ad
-import com.nadarm.yogiyo.data.model.Category
-import com.nadarm.yogiyo.data.model.Restaurant
+import com.nadarm.yogiyo.data.model.*
 import com.nadarm.yogiyo.ui.model.FoodCategory
 import com.nadarm.yogiyo.ui.model.PlusRestaurant
+import com.nadarm.yogiyo.ui.model.RestaurantDetail
 
 
 fun FoodCategory.mapToData(): Category {
@@ -71,6 +70,46 @@ fun Restaurant.mapFromData(): com.nadarm.yogiyo.ui.model.Restaurant {
     }
 }
 
+fun List<Restaurant>.mapFromDataRestaurant(): List<com.nadarm.yogiyo.ui.model.Restaurant> {
+    return this.map {
+        com.nadarm.yogiyo.ui.model.Restaurant(
+            it.id,
+            it.name,
+            it.thumbnailUrl,
+            it.address,
+            it.openTime,
+            it.deliveryTime,
+            it.representativeMenus,
+            it.deliveryFee,
+            it.minOrderAmount,
+            it.paymentMethods,
+            it.isPlus
+        )
+    }
+}
+
+
 fun List<Restaurant>.mapRestaurantsFromData(): List<com.nadarm.yogiyo.ui.model.Restaurant> {
     return this.map { it.mapFromData() }
+}
+
+fun GetRestaurantDetailResponse.mapFromData(): RestaurantDetail {
+    return RestaurantDetail(
+        restaurant.mapFromData(),
+        numOfMenu,
+        menus.map { it.mapFromData() }
+    )
+}
+
+fun LabeledDishes.mapFromData(): com.nadarm.yogiyo.ui.model.LabeledDishes {
+    return com.nadarm.yogiyo.ui.model.LabeledDishes(
+        label,
+        dishes.map { it.mapFromData() }
+    )
+}
+
+fun Dish.mapFromData(): com.nadarm.yogiyo.ui.model.Dish {
+    return com.nadarm.yogiyo.ui.model.Dish(
+        id, name, restaurantId, label, description, price
+    )
 }

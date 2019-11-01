@@ -4,6 +4,8 @@ import com.nadarm.yogiyo.data.remote.api.RestaurantRetrofit
 import com.nadarm.yogiyo.data.repository.RestaurantDataSource
 import com.nadarm.yogiyo.ui.model.Restaurant
 import com.nadarm.yogiyo.ui.model.RestaurantDetail
+import com.nadarm.yogiyo.util.mapFromData
+import com.nadarm.yogiyo.util.mapFromDataRestaurant
 import com.nadarm.yogiyo.util.mapRestaurantsFromData
 import io.reactivex.Single
 import javax.inject.Inject
@@ -20,17 +22,20 @@ class RestaurantRemoteDataSource @Inject constructor(
         token: String
     ): Single<List<Restaurant>> {
         return if (isPlus) {
-            retrofit.getRestaurants(categoryId, token)
-        } else {
             retrofit.getPlusRestaurants(categoryId, token)
-        }.map { it.mapRestaurantsFromData() }
+                .map { it.mapRestaurantsFromData() }
+        } else {
+            retrofit.getRestaurants(categoryId, token)
+                .map { it.mapFromDataRestaurant() }
+        }
+//        }.map { it.mapRestaurantsFromData() }
     }
 
     override fun getRestaurantDetail(
         restaurantId: Long,
-        baseUrl: String,
         token: String
     ): Single<RestaurantDetail> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return retrofit.getRestaurantDetail(restaurantId, token)
+            .map { it.mapFromData() }
     }
 }
