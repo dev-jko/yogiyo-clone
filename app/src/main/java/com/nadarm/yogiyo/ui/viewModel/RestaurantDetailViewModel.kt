@@ -26,6 +26,7 @@ interface RestaurantDetailViewModel {
         fun numOfMenu(): Flowable<Int>
         fun dishItems(): Flowable<List<BaseItem>>
         fun showDishDetail(): Flowable<Dish>
+        fun thumbnailDishes(): Flowable<Dish>
     }
 
 
@@ -42,10 +43,10 @@ interface RestaurantDetailViewModel {
         private val numOfMenu: BehaviorProcessor<Int> = BehaviorProcessor.create()
         private val showDishDetail: BehaviorProcessor<Dish> = BehaviorProcessor.create()
         private val dishItems: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
+        private val thumbnailDishes: BehaviorProcessor<Dish> = BehaviorProcessor.create()
 
         private val labelState: MutableMap<String, Boolean> = HashMap<String, Boolean>()
         private val labels: BehaviorProcessor<Map<String, Boolean>> = BehaviorProcessor.create()
-        private val baseUrl = stringMap["baseUrl"]?: error("baseUrl error")
         private val token = stringMap["token"]?: error("token error")
 
 
@@ -117,6 +118,7 @@ interface RestaurantDetailViewModel {
         override fun numOfMenu(): Flowable<Int> = numOfMenu
         override fun dishItems(): Flowable<List<BaseItem>> = dishItems
         override fun showDishDetail(): Flowable<Dish> = showDishDetail
+        override fun thumbnailDishes(): Flowable<Dish> = thumbnailDishes
 
         override fun itemClicked(item: BaseItem) {
             when (item) {
@@ -124,6 +126,8 @@ interface RestaurantDetailViewModel {
                 is Dish -> dishItemClicked.onNext(item)
             }
         }
+
+
 
         override fun lastScrollPosition(position: Int) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

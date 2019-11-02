@@ -74,10 +74,10 @@ data class Restaurant(
 )
 
 data class LabeledDishes(
-    @SerializedName("name")
+    @SerializedName("label")
     @Expose
     val label: String,
-    @SerializedName("menus")
+    @SerializedName("dishes")
     @Expose
     val dishes: List<Dish>
 )
