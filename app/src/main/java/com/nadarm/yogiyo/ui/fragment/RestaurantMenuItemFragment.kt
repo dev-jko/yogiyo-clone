@@ -61,7 +61,7 @@ class RestaurantMenuItemFragment(
     override fun getTitle(): String = "메뉴"
 
     private fun showDishDetail(dish: Dish) {
-        val dialog = OrderBottomSheetDialogFragment(dish)
+        val dialog = OrderBottomSheetDialogFragment(dish, restaurantDetailVm)
         dialog.show(childFragmentManager, "orderDialog")
     }
 }

@@ -10,7 +10,7 @@
 
         <variable
             name="delegate"
-            type="com.nadarm.yogiyo.ui.adapter.BaseListAdapter.Delegate" />
+            type="com.nadarm.yogiyo.ui.fragment.OrderBottomSheetDialogFragment.Delegate" />
     </data>
 
     <LinearLayout
@@ -77,8 +77,8 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@color/colorRed"
-            android:onClick="@{() -> delegate.itemClicked()}"
             android:gravity="center"
+            android:onClick="@{() -> delegate.requestPayment(item)}"
             android:text="주문하기"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"

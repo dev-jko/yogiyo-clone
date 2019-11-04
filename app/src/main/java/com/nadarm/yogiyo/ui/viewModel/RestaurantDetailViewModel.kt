@@ -2,6 +2,7 @@ package com.nadarm.yogiyo.ui.viewModel
 
 import com.nadarm.yogiyo.data.repository.RestaurantRepository
 import com.nadarm.yogiyo.ui.adapter.BaseListAdapter
+import com.nadarm.yogiyo.ui.fragment.OrderBottomSheetDialogFragment
 import com.nadarm.yogiyo.ui.model.BaseItem
 import com.nadarm.yogiyo.ui.model.Dish
 import com.nadarm.yogiyo.ui.model.LabeledDishes
@@ -11,13 +12,14 @@ import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.combineLatest
+import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 interface RestaurantDetailViewModel {
 
-    interface Inputs : BaseListAdapter.Delegate {
+    interface Inputs : BaseListAdapter.Delegate, OrderBottomSheetDialogFragment.Delegate {
         fun restaurantId(id: Long)
     }
 
@@ -27,6 +29,7 @@ interface RestaurantDetailViewModel {
         fun dishItems(): Flowable<List<BaseItem>>
         fun showDishDetail(): Flowable<Dish>
         fun thumbnailDishes(): Flowable<Dish>
+        fun openPayment(): Flowable<String>
     }
 
 
@@ -38,16 +41,18 @@ interface RestaurantDetailViewModel {
         private val restaurantId: PublishProcessor<Long> = PublishProcessor.create()
         private val dishItemClicked: PublishProcessor<Dish> = PublishProcessor.create()
         private val labelItemClicked: PublishProcessor<LabeledDishes> = PublishProcessor.create()
+        private val requestPayment: PublishProcessor<Dish> = PublishProcessor.create()
 
         private val restaurantInfo: BehaviorProcessor<Restaurant> = BehaviorProcessor.create()
         private val numOfMenu: BehaviorProcessor<Int> = BehaviorProcessor.create()
         private val showDishDetail: BehaviorProcessor<Dish> = BehaviorProcessor.create()
         private val dishItems: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
         private val thumbnailDishes: BehaviorProcessor<Dish> = BehaviorProcessor.create()
+        private val openPayment: BehaviorProcessor<String> = BehaviorProcessor.create()
 
         private val labelState: MutableMap<String, Boolean> = HashMap<String, Boolean>()
         private val labels: BehaviorProcessor<Map<String, Boolean>> = BehaviorProcessor.create()
-        private val token = stringMap["token"]?: error("token error")
+        private val token = stringMap["token"] ?: error("token error")
 
 
         val inputs: Inputs = this
@@ -111,6 +116,19 @@ interface RestaurantDetailViewModel {
                 }
                 .addTo(compositeDisposable)
 
+            // TODO payment
+            requestPayment
+                .withLatestFrom(restaurantInfo) { dish, info ->
+                    val params = HashMap<String, Map<String, String>>()
+                    params["data"] = mapOf<String, String>(
+                        "restaurantId" to info.id.toString(),
+                        "menus" to "${dish.id}::1"
+                    )
+                }
+                .map { "https://mockup-pg-web.kakao.com/v1/54527299a403291fa2ed0fb26da3d66d24182698e4d58cfe6253e6c36005399f/aInfo" }
+                .subscribe(openPayment)
+
+
         }
 
 
@@ -119,6 +137,7 @@ interface RestaurantDetailViewModel {
         override fun dishItems(): Flowable<List<BaseItem>> = dishItems
         override fun showDishDetail(): Flowable<Dish> = showDishDetail
         override fun thumbnailDishes(): Flowable<Dish> = thumbnailDishes
+        override fun openPayment(): Flowable<String> = openPayment
 
         override fun itemClicked(item: BaseItem) {
             when (item) {
@@ -128,13 +147,16 @@ interface RestaurantDetailViewModel {
         }
 
 
-
         override fun lastScrollPosition(position: Int) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
         override fun restaurantId(id: Long) {
             restaurantId.onNext(id)
+        }
+
+        override fun requestPayment(dish: Dish) {
+            requestPayment.onNext(dish)
         }
     }
 }

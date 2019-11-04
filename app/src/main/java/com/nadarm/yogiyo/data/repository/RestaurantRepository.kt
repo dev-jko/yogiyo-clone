@@ -18,6 +18,8 @@ interface RestaurantRepository {
     ): Single<RestaurantDetail>
 
 
+
+
 }
 
 interface RestaurantDataSource : RestaurantRepository {
