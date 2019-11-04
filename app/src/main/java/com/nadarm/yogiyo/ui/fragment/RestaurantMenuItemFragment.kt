@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.nadarm.yogiyo.R
 import com.nadarm.yogiyo.databinding.FragmentRestaurantMenuItemBinding
@@ -57,13 +56,12 @@ class RestaurantMenuItemFragment(
             )
 
 
-
-
     }
 
     override fun getTitle(): String = "메뉴"
 
     private fun showDishDetail(dish: Dish) {
-        Toast.makeText(context, dish.name, Toast.LENGTH_SHORT).show()
+        val dialog = OrderBottomSheetDialogFragment(dish)
+        dialog.show(childFragmentManager, "orderDialog")
     }
 }
