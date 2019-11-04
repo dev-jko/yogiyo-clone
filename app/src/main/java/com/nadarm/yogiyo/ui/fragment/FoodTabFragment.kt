@@ -16,6 +16,7 @@ import com.nadarm.yogiyo.ui.viewModel.TopScrollVIewModel
 import com.nadarm.yogiyo.util.subscribeMainThread
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_food_tab.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -62,15 +63,17 @@ class FoodTabFragment @Inject constructor(
             .subscribeMainThread(Schedulers.io(), compositeDisposable) { adapter.tabs = it }
 
 
-
-
-        arguments?.let {
-            tab_textView.text = it["category"].toString()
-        }
-
         // TODO 선택된 카테고리 탭에서 시작
         // TODO 선택된 카테고리 탭 유지하기
-//        viewPager.currentItem
+        foodCategoryVm.outputs.changePagePosition()
+            .delay(100, TimeUnit.MILLISECONDS)
+            .subscribeMainThread(Schedulers.computation(), compositeDisposable) {
+                viewPager.currentItem = it
+            }
+        arguments?.let {
+            foodCategoryVm.inputs.pageSelected(it["category"] as Long)
+        }
+
 
     }
 }

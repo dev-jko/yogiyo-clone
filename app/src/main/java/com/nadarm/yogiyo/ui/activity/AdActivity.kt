@@ -17,9 +17,11 @@ class AdActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ad)
 
-        val string =
+        val url =
             stringMap["baseUrl"] + path + intent.getLongExtra("adId", -1).toString()
-        textView2.text = "$string = ok"
+
+        web_view.loadUrl(url)
+
     }
 
 

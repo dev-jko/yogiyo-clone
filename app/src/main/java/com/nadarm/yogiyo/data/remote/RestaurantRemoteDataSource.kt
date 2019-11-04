@@ -28,6 +28,11 @@ class RestaurantRemoteDataSource @Inject constructor(
             retrofit.getRestaurants(categoryId, token)
                 .map { it.mapFromDataRestaurant() }
         }
+            .map { list ->
+                list.filter {
+                    it.thumbnailUrl != ""
+                }
+            }
 //        }.map { it.mapRestaurantsFromData() }
     }
 

@@ -22,13 +22,14 @@
 
         <TextView
             android:layout_marginStart="20dp"
-            android:id="@+id/label_text_view"
+            android:id="@+id/name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="@{item.label}"
-            android:textSize="15sp"
+            android:textSize="17sp"
             android:textStyle="bold"
+            android:textColor="@color/colorBlack"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/state_image_view"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -39,13 +40,13 @@
             android:id="@+id/state_image_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/label_text_view"
+            app:layout_constraintStart_toEndOf="@+id/name_text_view"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/arrow_down_float" />
+            app:srcCompat="@drawable/down" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
