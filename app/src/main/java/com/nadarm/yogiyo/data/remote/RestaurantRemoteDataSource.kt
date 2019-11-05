@@ -43,4 +43,8 @@ class RestaurantRemoteDataSource @Inject constructor(
         return retrofit.getRestaurantDetail(restaurantId, token)
             .map { it.mapFromData() }
     }
+
+    override fun requestPayment(restaurantId: Long, token: String): Single<String> {
+        return retrofit.requestPayment(restaurantId, token)
+    }
 }

@@ -29,4 +29,8 @@ class RestaurantDataRepository @Inject constructor(
 //        return cache.getRestaurantDetail(restaurantId, baseUrl, token)  TODO cache
         return remote.getRestaurantDetail(restaurantId, token)
     }
+
+    override fun requestPayment(restaurantId: Long, token: String): Single<String> {
+        return remote.requestPayment(restaurantId, token)
+    }
 }

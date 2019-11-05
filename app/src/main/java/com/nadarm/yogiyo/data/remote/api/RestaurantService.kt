@@ -2,10 +2,10 @@ package com.nadarm.yogiyo.data.remote.api
 
 import com.nadarm.yogiyo.data.model.GetRestaurantDetailResponse
 import com.nadarm.yogiyo.data.model.GetRestaurantResponse
+import com.nadarm.yogiyo.data.model.RequestPaymentBody
+import com.nadarm.yogiyo.data.model.RequestPaymentResponse
 import io.reactivex.Single
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface RestaurantService {
 
@@ -25,5 +25,11 @@ interface RestaurantService {
     fun getRestaurantDetail(
         @Path("restaurantId") restaurantId: Long,
         @Header("x-access-token") token: String
-    ):Single<GetRestaurantDetailResponse>
+    ): Single<GetRestaurantDetailResponse>
+
+    @POST("api/restaurants/payment-request")
+    fun requestPayment(
+        @Body body: RequestPaymentBody,
+        @Header("x-access-token") token: String
+    ): Single<RequestPaymentResponse>
 }

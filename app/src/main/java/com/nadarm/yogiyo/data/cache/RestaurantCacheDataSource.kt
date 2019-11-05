@@ -157,4 +157,8 @@ class RestaurantCacheDataSource @Inject constructor() : RestaurantDataSource.Cac
     ): Single<RestaurantDetail> {
         return Single.just(restaurantDetail)
     }
+
+    override fun requestPayment(restaurantId: Long, token: String): Single<String> {
+        return Single.just("https://google.com")
+    }
 }

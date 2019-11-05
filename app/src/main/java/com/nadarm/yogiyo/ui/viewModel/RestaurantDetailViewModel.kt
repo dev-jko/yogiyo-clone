@@ -48,7 +48,7 @@ interface RestaurantDetailViewModel {
         private val showDishDetail: BehaviorProcessor<Dish> = BehaviorProcessor.create()
         private val dishItems: BehaviorProcessor<List<BaseItem>> = BehaviorProcessor.create()
         private val thumbnailDishes: BehaviorProcessor<Dish> = BehaviorProcessor.create()
-        private val openPayment: BehaviorProcessor<String> = BehaviorProcessor.create()
+        private val openPayment: Flowable<String>
 
         private val labelState: MutableMap<String, Boolean> = HashMap<String, Boolean>()
         private val labels: BehaviorProcessor<Map<String, Boolean>> = BehaviorProcessor.create()
@@ -117,16 +117,19 @@ interface RestaurantDetailViewModel {
                 .addTo(compositeDisposable)
 
             // TODO payment
-            requestPayment
+            openPayment = requestPayment
                 .withLatestFrom(restaurantInfo) { dish, info ->
-                    val params = HashMap<String, Map<String, String>>()
-                    params["data"] = mapOf<String, String>(
-                        "restaurantId" to info.id.toString(),
-                        "menus" to "${dish.id}::1"
-                    )
+                    //                    val params = HashMap<String, Map<String, String>>()
+//                    params["data"] = mapOf<String, String>(
+//                        "restaurantId" to info.id.toString(),
+//                        "menus" to "${dish.id}::1"
+//                    )
+                    info.id
                 }
-                .map { "https://mockup-pg-web.kakao.com/v1/54527299a403291fa2ed0fb26da3d66d24182698e4d58cfe6253e6c36005399f/aInfo" }
-                .subscribe(openPayment)
+                .flatMapSingle {
+                    restaurantRepo.requestPayment(it, token)
+                        .subscribeOn(Schedulers.io())
+                }
 
 
         }

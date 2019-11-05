@@ -17,7 +17,7 @@ interface RestaurantRepository {
         token: String
     ): Single<RestaurantDetail>
 
-
+    fun requestPayment(restaurantId: Long, token: String): Single<String>
 
 
 }

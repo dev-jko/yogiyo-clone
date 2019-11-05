@@ -1,6 +1,7 @@
 package com.nadarm.yogiyo.data.remote.api
 
 import com.nadarm.yogiyo.data.model.GetRestaurantDetailResponse
+import com.nadarm.yogiyo.data.model.RequestPaymentBody
 import com.nadarm.yogiyo.data.model.Restaurant
 import io.reactivex.Single
 import javax.inject.Inject
@@ -26,5 +27,11 @@ class RestaurantRetrofit @Inject constructor(
         token: String
     ): Single<GetRestaurantDetailResponse> {
         return service.getRestaurantDetail(restaurantId, token)
+    }
+
+    fun requestPayment(restaurantId: Long, token: String): Single<String> {
+        val body = RequestPaymentBody(restaurantId)
+        return service.requestPayment(body, token)
+            .map { it.paymentUrl }
     }
 }
